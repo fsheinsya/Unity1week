@@ -1,16 +1,11 @@
 using UnityEngine;
 
-public class MonsterData : MonoBehaviour
+[System.Serializable]
+public class MonsterData
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public string Name;
+    public Sprite Icon;
+    public MonsterStats Stats;
+    public int CurrentHp;
+    public SpecialAbilityType SpecialAbility;
 }

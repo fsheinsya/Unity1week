@@ -1,16 +1,11 @@
-using UnityEngine;
+using System.Collections.Generic;
 
-public class MatchResultData : MonoBehaviour
+[System.Serializable]
+public class MatchResultData
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public string WinnerName;
+    public PredictionSide WinnerSide;
+    public bool IsPredictionSuccess;
+    public int RewardCoin;
+    public List<string> BattleLogs;
 }

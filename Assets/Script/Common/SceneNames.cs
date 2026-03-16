@@ -2,15 +2,9 @@ using UnityEngine;
 
 public class SceneNames : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public const string Title = "Title";
+    public const string Bet = "Bet";
+    public const string Battle = "Battle";
+    public const string Result = "Result";
+    public const string AllResult = "AllResult";
 }

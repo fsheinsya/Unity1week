@@ -1,16 +1,23 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Titleシーン全体の進行を管理するクラス
+/// 主な役割は「ゲーム開始ボタンが押されたら新しいゲームを始めて Bet シーンへ移動すること」
+/// </summary>
 public class TitleSceneController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    /// <summary>
+    /// Startボタンから呼ばれるメソッド
+    /// ゲーム状態を初期化して、Betシーンへ移動する
+    /// </summary>
+    public void OnClickStartGame()
     {
-        
-    }
+        // GameSession に新規ゲーム開始を依頼する
+        // ここでコイン数・ラウンド数・対戦カードなどが初期化される
+        GameSession.Instance.StartNewGame();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // 賭け画面へ移動する
+        SceneManager.LoadScene(SceneNames.Bet);
     }
 }

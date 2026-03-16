@@ -1,16 +1,7 @@
-using UnityEngine;
-
-public class Betdata : MonoBehaviour
+[System.Serializable]
+public class BetData
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public PredictionSide Side;
+    public int Amount;
+    public InspectLevel InspectLevel;
 }

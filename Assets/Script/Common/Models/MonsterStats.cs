@@ -1,16 +1,8 @@
-using UnityEngine;
-
-public class MonsterStats : MonoBehaviour
+[System.Serializable]
+public class MonsterStats
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public int MaxHp;
+    public int Attack;
+    public int Defense;
+    public int Growth;
 }
