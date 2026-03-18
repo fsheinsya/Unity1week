@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// ・コイン表示
 /// ・左右キャラ名表示
 /// ・左右キャラ画像表示
-/// ・Status Miru ボタン処理
+/// ・左ステータスUI / 右ステータスUI の表示切り替え
 /// ・Select ボタン処理
 /// ・Battle シーンへの移動
 /// </summary>
@@ -30,16 +30,21 @@ public class BetSceneController : MonoBehaviour
     [SerializeField] private Button rightStatusButton;
     [SerializeField] private Button rightSelectButton;
 
-    //BetStatusViewを参照
-    [Header("ステータス表示欄（任意）")]
-    [SerializeField] private BetStatusView statusView;
+    [Header("ステータス表示欄")]
+    [SerializeField] private BetStatusView leftStatusView;
+    [SerializeField] private BetStatusView rightStatusView;
+
+    [Header("選択UIをまとめた親（任意）")]
+    [SerializeField] private GameObject selectedUIRoot;
 
     // 現在どちらに賭けるかを保持する
-    private PredictionSide? selectedSide;
+    private PredictionSide selectedSide;
 
-    // 最初は固定で 10 コイン賭ける
+    // まだ選んでいない状態かどうか
+    private bool hasSelectedSide = false;
+
+    // 今回は仮で賭け金を固定
     private const int BET_AMOUNT = 10;
-
 
     /// <summary>
     /// シーン開始時に呼ばれる
@@ -60,102 +65,142 @@ public class BetSceneController : MonoBehaviour
         // 左右モンスター情報をUIに反映する
         SetupMonsterViews();
 
-        // ステータス表示欄がある場合は初期化しておく
-        if (statusView != null)
+        // 左右のステータス表示欄を初期化する
+        if (leftStatusView != null)
         {
-            statusView.Clear();
+            leftStatusView.Clear();
+            leftStatusView.Close();
         }
 
+        if (rightStatusView != null)
+        {
+            rightStatusView.Clear();
+            rightStatusView.Close();
+        }
+
+        // 最初は選択UIを開いておく
+        OpenSelectedUI();
+
         // 最初はどちらも選ばれていない状態にする
+        hasSelectedSide = false;
+
+        // ボタン色を初期化する
         UpdateSelectButtonColors();
     }
 
     /// <summary>
-    /// 選択画面をつける
+    /// 選択画面を表示する
     /// </summary>
     public void OpenSelectedUI()
     {
-        //選択画面の表示
-        coinText.enabled = true;
+        // 親をまとめている場合は親ごと表示
+        if (selectedUIRoot != null)
+        {
+            selectedUIRoot.SetActive(true);
+            return;
+        }
+
+        // 親を作っていない場合は個別に表示
         leftCharaNameText.enabled = true;
         leftCharaImage.enabled = true;
-        leftSelectButton.enabled = true;
-        leftStatusButton.enabled = true;
+        leftSelectButton.gameObject.SetActive(true);
+        leftStatusButton.gameObject.SetActive(true);
+
         rightCharaNameText.enabled = true;
         rightCharaImage.enabled = true;
-        rightSelectButton.enabled = true;
-        rightStatusButton.enabled = true;
+        rightSelectButton.gameObject.SetActive(true);
+        rightStatusButton.gameObject.SetActive(true);
     }
 
     /// <summary>
-    /// 選択画面を消す
+    /// 選択画面を非表示にする
     /// </summary>
     public void CloseSelectedUI()
     {
-        // コイン表示を非表示にする
-        coinText.enabled = false;
+        // 親をまとめている場合は親ごと非表示
+        if (selectedUIRoot != null)
+        {
+            selectedUIRoot.SetActive(false);
+            return;
+        }
 
-        // 左キャラクターUIを非表示
-        leftCharaNameText.enabled = false;   // 左キャラ名前
-        leftCharaImage.enabled = false;      // 左キャラ画像
-        leftSelectButton.enabled = false;    // 左選択ボタン
-        leftStatusButton.enabled = false;    // 左ステータスボタン
+        // 親を作っていない場合は個別に非表示
+        leftCharaNameText.enabled = false;
+        leftCharaImage.enabled = false;
+        leftSelectButton.gameObject.SetActive(false);
+        leftStatusButton.gameObject.SetActive(false);
 
-        // 右キャラクターUIを非表示
-        rightCharaNameText.enabled = false;  // 右キャラ名前
-        rightCharaImage.enabled = false;     // 右キャラ画像
-        rightSelectButton.enabled = false;   // 右選択ボタン
-        rightStatusButton.enabled = false;   // 右ステータスボタン
-    }
-
-    /// <summary>
-    /// ステータス画面をつける
-    /// </summary>
-    public void OpenStatusUI()
-    {
-        statusView.hpText.enabled = true;
-        statusView.atkText.enabled = true;
-        statusView.defText.enabled = true;
-        statusView.growthText.enabled = true;
-        statusView.abilityText.enabled = true;
-    }
-
-    /// <summary>
-    /// ステータス画面を消す
-    /// </summary>
-    public void CloseStatusUI()
-    {
-
+        rightCharaNameText.enabled = false;
+        rightCharaImage.enabled = false;
+        rightSelectButton.gameObject.SetActive(false);
+        rightStatusButton.gameObject.SetActive(false);
     }
 
     /// <summary>
     /// 左の Status Miru ボタンから呼ばれる
-    /// 左モンスターのステータスを表示する
+    /// 左モンスターのステータスを左側UIに表示する
     /// </summary>
     public void OnClickLeftStatus()
     {
-        // statusView が設定されていない場合は何もしない
-        if (statusView == null) return;
+        // 左側のステータスUIが設定されていない場合は何もしない
+        if (leftStatusView == null) return;
 
+        // 選択画面を閉じる
         CloseSelectedUI();
-        OpenStatusUI();
 
-        statusView.Show(GameSession.Instance.LeftMonster);
+        // 右側ステータスUIは閉じる
+        if (rightStatusView != null)
+        {
+            rightStatusView.Close();
+        }
+
+        // 左側ステータスUIを開いて情報を表示する
+        leftStatusView.Open();
+        leftStatusView.Show(GameSession.Instance.LeftMonster);
     }
 
     /// <summary>
     /// 右の Status Miru ボタンから呼ばれる
-    /// 右モンスターのステータスを表示する
+    /// 右モンスターのステータスを右側UIに表示する
     /// </summary>
     public void OnClickRightStatus()
     {
-        // statusView が設定されていない場合は何もしない
-        if (statusView == null) return;
+        // 右側のステータスUIが設定されていない場合は何もしない
+        if (rightStatusView == null) return;
 
+        // 選択画面を閉じる
         CloseSelectedUI();
-        OpenStatusUI();
 
-        statusView.Show(GameSession.Instance.RightMonster);
+        // 左側ステータスUIは閉じる
+        if (leftStatusView != null)
+        {
+            leftStatusView.Close();
+        }
+
+        // 右側ステータスUIを開いて情報を表示する
+        rightStatusView.Open();
+        rightStatusView.Show(GameSession.Instance.RightMonster);
+    }
+
+    /// <summary>
+    /// ステータス画面から選択画面へ戻る
+    /// Backボタンなどから呼ぶ
+    /// </summary>
+    public void OnClickBackMenu()
+    {
+        // 左右のステータスUIを閉じる
+        if (leftStatusView != null)
+        {
+            leftStatusView.Close();
+        }
+
+        if (rightStatusView != null)
+        {
+            rightStatusView.Close();
+        }
+
+        // 選択UIを再表示する
+        OpenSelectedUI();
     }
 
     /// <summary>
@@ -166,6 +211,7 @@ public class BetSceneController : MonoBehaviour
     {
         // 左側を選択状態にする
         selectedSide = PredictionSide.Left;
+        hasSelectedSide = true;
 
         // ボタン色を更新して視覚的に分かるようにする
         UpdateSelectButtonColors();
@@ -185,6 +231,7 @@ public class BetSceneController : MonoBehaviour
     {
         // 右側を選択状態にする
         selectedSide = PredictionSide.Right;
+        hasSelectedSide = true;
 
         // ボタン色を更新して視覚的に分かるようにする
         UpdateSelectButtonColors();
@@ -251,7 +298,7 @@ public class BetSceneController : MonoBehaviour
         if (leftButtonImage == null || rightButtonImage == null) return;
 
         // まだ何も選ばれていないなら両方白
-        if (selectedSide == null)
+        if (!hasSelectedSide)
         {
             leftButtonImage.color = normalColor;
             rightButtonImage.color = normalColor;
@@ -278,17 +325,16 @@ public class BetSceneController : MonoBehaviour
     /// </summary>
     private void SaveBetData()
     {
-        // 念のため未選択なら保存しない
-        if (selectedSide == null) return;
+        // まだ未選択なら保存しない
+        if (!hasSelectedSide) return;
 
         // 賭け情報を作る
         BetData betData = new BetData
         {
-            Side = selectedSide.Value,
+            Side = selectedSide,
             Amount = BET_AMOUNT,
 
-            // 今回は「Status Miru」は情報開示の演出扱いなので、
-            // セッション上は Full にしておく
+            // 今回はステータスを見られる想定なので Full にしておく
             InspectLevel = InspectLevel.Full
         };
 

@@ -7,6 +7,15 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class TitleSceneController : MonoBehaviour
 {
+    //画面をクリックをしたら
+    void Update()
+    {
+      if(Input.GetMouseButtonDown(0)　|| Input.GetMouseButtonDown(1))
+        {
+            OnClickStartGame();
+        }
+    }
+
     /// <summary>
     /// Startボタンから呼ばれるメソッド
     /// ゲーム状態を初期化して、Betシーンへ移動する

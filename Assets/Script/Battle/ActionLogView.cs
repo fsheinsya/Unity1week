@@ -4,10 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// 戦闘ログ欄の表示を担当するクラス
-/// 主な役割:
-/// ・ログの初期化
-/// ・1行追加
-/// ・文字送り表示
+/// 下の大きいテキストウィンドウにログを出す
 /// </summary>
 public class ActionLogView : MonoBehaviour
 {
@@ -15,7 +12,7 @@ public class ActionLogView : MonoBehaviour
     [SerializeField] private TMP_Text logText;
 
     /// <summary>
-    /// ログ欄を空にする
+    /// ログを空にする
     /// </summary>
     public void Clear()
     {
@@ -23,11 +20,11 @@ public class ActionLogView : MonoBehaviour
     }
 
     /// <summary>
-    /// ログ欄に1行そのまま追加する
+    /// 1行そのまま追加する
     /// </summary>
     public void AppendLine(string message)
     {
-        // すでに文字がある場合は改行してから追記する
+        // すでに文字があるなら改行してから追加する
         if (!string.IsNullOrEmpty(logText.text))
         {
             logText.text += "\n";
@@ -37,17 +34,17 @@ public class ActionLogView : MonoBehaviour
     }
 
     /// <summary>
-    /// 文字送り風に1文字ずつログを追加する
+    /// 1文字ずつ表示しながら1行追加する
     /// </summary>
     public async UniTask AppendLineAnimated(string message, int delayMillisecondsPerChar = 20)
     {
-        // すでに文字がある場合は改行してから始める
+        // すでに文字があるなら改行してから追加する
         if (!string.IsNullOrEmpty(logText.text))
         {
             logText.text += "\n";
         }
 
-        // 1文字ずつ追加していく
+        // 1文字ずつ順番に追加する
         foreach (char c in message)
         {
             logText.text += c;

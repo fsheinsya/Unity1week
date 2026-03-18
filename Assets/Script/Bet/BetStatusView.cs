@@ -3,16 +3,17 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Betシーンで、選んだモンスターのステータスを表示するためのクラス
-/// StatusUI にアタッチして使う
+/// Betシーンで、1体分のモンスター情報を表示するクラス
+/// LeftStatusUI と RightStatusUI の両方に付けて使う
 /// </summary>
 public class BetStatusView : MonoBehaviour
 {
-    //キャラの画像を表示
+    [Header("表示全体をまとめる親")]
+    [SerializeField] public GameObject rootObject;
+
     [Header("キャラクター画像")]
     [SerializeField] public Image charaImage;
 
-    //キャラのステータスを表示
     [Header("ステータステキスト")]
     [SerializeField] public TMP_Text hpText;
     [SerializeField] public TMP_Text atkText;
@@ -21,7 +22,7 @@ public class BetStatusView : MonoBehaviour
     [SerializeField] public TMP_Text abilityText;
 
     /// <summary>
-    /// 最初に呼んで、表示を空っぽにする
+    /// 最初に呼んで、表示を空状態にする
     /// </summary>
     public void Clear()
     {
@@ -37,6 +38,11 @@ public class BetStatusView : MonoBehaviour
     /// </summary>
     public void Show(MonsterData data)
     {
+        if (charaImage != null)
+        {
+            charaImage.sprite = data.Icon;
+        }
+
         hpText.text = $"HP : {data.Stats.MaxHp}";
         atkText.text = $"ATK : {data.Stats.Attack}";
         defText.text = $"DEF : {data.Stats.Defense}";
@@ -45,7 +51,37 @@ public class BetStatusView : MonoBehaviour
     }
 
     /// <summary>
-    /// enum の特殊能力名を、画面表示用の文字列に変換する
+    /// ステータスUI全体を表示する
+    /// </summary>
+    public void Open()
+    {
+        if (rootObject != null)
+        {
+            rootObject.SetActive(true);
+        }
+        else
+        {
+            gameObject.SetActive(true);
+        }
+    }
+
+    /// <summary>
+    /// ステータスUI全体を非表示にする
+    /// </summary>
+    public void Close()
+    {
+        if (rootObject != null)
+        {
+            rootObject.SetActive(false);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// enum の特殊能力を表示用文字列に変換する
     /// </summary>
     private string GetAbilityName(SpecialAbilityType type)
     {

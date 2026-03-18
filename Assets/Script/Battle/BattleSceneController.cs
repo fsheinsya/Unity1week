@@ -1,77 +1,166 @@
 using Cysharp.Threading.Tasks;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
-/// Battleシーン全体の進行を管理するクラス
-/// 主な役割:
-/// ・現在の賭け情報を取得
-/// ・バトルシミュレーションを実行
-/// ・ログを順番に表示
-/// ・結果を GameSession に保存
-/// ・Result シーンへ移動
+/// Battleシーン全体を管理するクラス
+/// ・左右モンスターの表示
+/// ・賭け金の消費
+/// ・バトル実行
+/// ・ログ表示
+/// ・Resultシーンへの遷移
+/// を担当する
 /// </summary>
 public class BattleSceneController : MonoBehaviour
 {
+    [Header("上部表示")]
+    [SerializeField] private TMP_Text coinText;
+
+    [Header("左キャラ表示")]
+    [SerializeField] private Image leftCharaImage;
+    [SerializeField] private BattleStatusView leftStatusView;
+
+    [Header("右キャラ表示")]
+    [SerializeField] private Image rightCharaImage;
+    [SerializeField] private BattleStatusView rightStatusView;
+
     [Header("ログ表示")]
     [SerializeField] private ActionLogView actionLogView;
 
-    // 戦闘シミュレーションを担当するクラス
+    // 戦闘計算本体
     private BattleSimulator battleSimulator;
 
     /// <summary>
-    /// シーン開始時に非同期で戦闘を進行する
+    /// シーン開始時に呼ばれる
+    /// Battleシーンに入ったら自動で戦闘を始める
     /// </summary>
     private async void Start()
     {
-        // シミュレーターを作成
+        // セッションが存在しない場合はTitleへ戻す
+        if (GameSession.Instance == null)
+        {
+            SceneManager.LoadScene(SceneNames.Title);
+            return;
+        }
+
+        // 賭け情報がない場合はBetへ戻す
+        if (GameSession.Instance.CurrentBet == null)
+        {
+            SceneManager.LoadScene(SceneNames.Bet);
+            return;
+        }
+
+        // BattleSimulator を作成する
         battleSimulator = new BattleSimulator();
 
-        // セッション情報を取得
-        GameSession session = GameSession.Instance;
+        // 戦闘開始前の表示を整える
+        SetupBattleView();
 
-        // セッションや賭け情報が存在しない場合は安全のため Bet に戻す
-        if (session == null || session.CurrentBet == null)
-        {
-            SceneManager.LoadScene(SceneNames.Bet);
-            return;
-        }
-
-        // 賭け金をここで消費する
-        // 賭けに失敗した場合はそのまま没収される設計
-        bool success = session.TryConsumeCoin(session.CurrentBet.Amount);
-        if (!success)
-        {
-            // コイン不足なら賭けが成立しないので Bet に戻す
-            SceneManager.LoadScene(SceneNames.Bet);
-            return;
-        }
-
-        // ログ欄を初期化
-        actionLogView.Clear();
-
-        // 少し待ってから戦闘開始演出っぽくする
+        // 少し待ってから開始すると見栄えが良い
         await UniTask.Delay(500);
 
-        // 左右モンスターと賭け情報を使って戦闘結果を計算する
+        // 実際の戦闘処理を開始する
+        await PlayBattleAsync();
+    }
+
+    /// <summary>
+    /// Battle開始前のUI初期表示を行う
+    /// </summary>
+    private void SetupBattleView()
+    {
+        MonsterData leftMonster = GameSession.Instance.LeftMonster;
+        MonsterData rightMonster = GameSession.Instance.RightMonster;
+
+        // 上部のコイン表示を更新する
+        coinText.text = $"nokorikakekin:{GameSession.Instance.CurrentCoin}";
+
+        // 左右キャラ画像を表示する
+        if (leftCharaImage != null)
+        {
+            leftCharaImage.sprite = leftMonster.Icon;
+        }
+
+        if (rightCharaImage != null)
+        {
+            rightCharaImage.sprite = rightMonster.Icon;
+        }
+
+        // 左右ステータス欄を初期表示する
+        if (leftStatusView != null)
+        {
+            leftStatusView.Show(leftMonster);
+        }
+
+        if (rightStatusView != null)
+        {
+            rightStatusView.Show(rightMonster);
+        }
+
+        // ログ欄を空にする
+        if (actionLogView != null)
+        {
+            actionLogView.Clear();
+        }
+    }
+
+    /// <summary>
+    /// 戦闘を実行してログを順番に表示する
+    /// </summary>
+    private async UniTask PlayBattleAsync()
+    {
+        GameSession session = GameSession.Instance;
+
+        // 賭け金をここで消費する
+        // 外した場合はこのまま没収になる
+        bool consumeSuccess = session.TryConsumeCoin(session.CurrentBet.Amount);
+
+        // コインが足りなければBetへ戻す
+        if (!consumeSuccess)
+        {
+            SceneManager.LoadScene(SceneNames.Bet);
+            return;
+        }
+
+        // 消費後のコイン表示を更新
+        coinText.text = $"nokorikakekin:{session.CurrentCoin}";
+
+        // 開始ログ
+        await actionLogView.AppendLineAnimated("闇の闘技場、開幕...");
+        await UniTask.Delay(500);
+
+        // BattleSimulator で戦闘結果を計算する
         MatchResultData result = battleSimulator.Simulate(
             session.LeftMonster,
             session.RightMonster,
             session.CurrentBet
         );
 
-        // 戦闘ログを1行ずつ順番に表示する
+        // 計算済みログを順番に流す
         foreach (string log in result.BattleLogs)
         {
             await actionLogView.AppendLineAnimated(log);
-            await UniTask.Delay(350);
+            await UniTask.Delay(300);
+
+            // 現在HPを反映し直す
+            // Simulate後は最終状態になっているので、簡易的に最終HPを反映する形
+            if (leftStatusView != null)
+            {
+                leftStatusView.UpdateHp(session.LeftMonster);
+            }
+
+            if (rightStatusView != null)
+            {
+                rightStatusView.UpdateHp(session.RightMonster);
+            }
         }
 
-        // 予想成功なら報酬コインを追加する
+        // 的中した場合は報酬コインを加算する
         if (result.IsPredictionSuccess)
         {
             session.AddCoin(result.RewardCoin);
+            coinText.text = $"nokorikakekin:{session.CurrentCoin}";
             await actionLogView.AppendLineAnimated($"予想的中！ {result.RewardCoin} コイン獲得！");
         }
         else
@@ -79,10 +168,10 @@ public class BattleSceneController : MonoBehaviour
             await actionLogView.AppendLineAnimated("予想失敗……掛け金は没収された。");
         }
 
-        // 今回の試合結果をセッションに保存する
+        // 今回の結果を保存する
         session.SetMatchResult(result);
 
-        // 少し待ってから結果画面へ移動する
+        // 少し待ってからResultへ移動する
         await UniTask.Delay(1000);
         SceneManager.LoadScene(SceneNames.Result);
     }
