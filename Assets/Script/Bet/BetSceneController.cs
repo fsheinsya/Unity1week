@@ -8,6 +8,7 @@ using UnityEngine.UI;
 /// ・コイン表示
 /// ・左右キャラ表示
 /// ・左右それぞれの詳細ステータス画面表示
+/// ・賭け金調整
 /// ・左右どちらに賭けるか選択
 /// ・Battleシーンへの移動
 /// を担当する
@@ -38,34 +39,38 @@ public class BetSceneController : MonoBehaviour
     [Header("右の詳細ステータス画面")]
     [SerializeField] private BetStatusDetailView rightStatusView;
 
+    [Header("賭け金UI")]
+    [SerializeField] private TMP_Text betAmountText;
+    [SerializeField] private Button upButton;
+    [SerializeField] private Button downButton;
+
     // 現在どちらを選んだか
     private PredictionSide selectedSide;
 
     // まだ未選択かどうか
     private bool hasSelectedSide = false;
 
-    // 仮で固定賭け金
-    private const int BET_AMOUNT = 10;
+    // 現在の賭け金
+    private int currentBetAmount = 10;
+
+    // 最小 / 最大 / 増減量
+    private const int MIN_BET = 10;
+    private const int BET_STEP = 1;
 
     /// <summary>
     /// シーン開始時に呼ばれる
     /// </summary>
     private void Start()
     {
-        // セッションが無ければタイトルへ戻す
         if (GameSession.Instance == null)
         {
             SceneManager.LoadScene(SceneNames.Title);
             return;
         }
 
-        // コイン表示更新
         RefreshCoinText();
-
-        // 左右キャラ表示更新
         SetupMonsterViews();
 
-        // 左右の詳細画面を初期化して閉じる
         if (leftStatusView != null)
         {
             leftStatusView.Clear();
@@ -78,12 +83,19 @@ public class BetSceneController : MonoBehaviour
             rightStatusView.Close();
         }
 
-        // 通常選択画面を開く
         OpenSelectedUI();
 
-        // 選択状態初期化
         hasSelectedSide = false;
         UpdateSelectButtonColors();
+
+        // 初期賭け金を設定
+        currentBetAmount = Mathf.Min(MIN_BET, GameSession.Instance.CurrentCoin);
+        if (currentBetAmount <= 0)
+        {
+            currentBetAmount = MIN_BET;
+        }
+
+        RefreshBetAmountText();
     }
 
     /// <summary>
@@ -135,19 +147,15 @@ public class BetSceneController : MonoBehaviour
     /// </summary>
     public void OnClickLeftStatus()
     {
-        // 左側ビューが無ければ何もしない
         if (leftStatusView == null) return;
 
-        // 通常選択画面を閉じる
         CloseSelectedUI();
 
-        // 右側の詳細画面は閉じる
         if (rightStatusView != null)
         {
             rightStatusView.Close();
         }
 
-        // 左側の詳細画面を開いて、左モンスター情報を表示する
         leftStatusView.Open();
         leftStatusView.Show(GameSession.Instance.LeftMonster);
     }
@@ -157,30 +165,24 @@ public class BetSceneController : MonoBehaviour
     /// </summary>
     public void OnClickRightStatus()
     {
-        // 右側ビューが無ければ何もしない
         if (rightStatusView == null) return;
 
-        // 通常選択画面を閉じる
         CloseSelectedUI();
 
-        // 左側の詳細画面は閉じる
         if (leftStatusView != null)
         {
             leftStatusView.Close();
         }
 
-        // 右側の詳細画面を開いて、右モンスター情報を表示する
         rightStatusView.Open();
         rightStatusView.Show(GameSession.Instance.RightMonster);
     }
 
     /// <summary>
     /// 詳細画面から通常画面へ戻る
-    /// 左右どちらのBackボタンから押されてもよい
     /// </summary>
     public void OnClickBackMenu()
     {
-        // 左右両方の詳細画面を閉じる
         if (leftStatusView != null)
         {
             leftStatusView.Close();
@@ -191,8 +193,37 @@ public class BetSceneController : MonoBehaviour
             rightStatusView.Close();
         }
 
-        // 通常選択画面を再表示
         OpenSelectedUI();
+    }
+
+    /// <summary>
+    /// 賭け金を増やす
+    /// </summary>
+    public void OnClickBetUp()
+    {
+        int maxBet = GetMaxBetAmount();
+
+        currentBetAmount += BET_STEP;
+        if (currentBetAmount > maxBet)
+        {
+            currentBetAmount = maxBet;
+        }
+
+        RefreshBetAmountText();
+    }
+
+    /// <summary>
+    /// 賭け金を減らす
+    /// </summary>
+    public void OnClickBetDown()
+    {
+        currentBetAmount -= BET_STEP;
+        if (currentBetAmount < MIN_BET)
+        {
+            currentBetAmount = MIN_BET;
+        }
+
+        RefreshBetAmountText();
     }
 
     /// <summary>
@@ -232,6 +263,33 @@ public class BetSceneController : MonoBehaviour
     }
 
     /// <summary>
+    /// 賭け金表示更新
+    /// </summary>
+    private void RefreshBetAmountText()
+    {
+        if (betAmountText != null)
+        {
+            betAmountText.text = currentBetAmount.ToString();
+        }
+    }
+
+    /// <summary>
+    /// 今回賭けられる最大額を返す
+    /// </summary>
+    private int GetMaxBetAmount()
+    {
+        // 所持コイン以下、かつ10刻みで扱いやすくする
+        int coin = GameSession.Instance.CurrentCoin;
+
+        if (coin < MIN_BET)
+        {
+            return MIN_BET;
+        }
+
+        return (coin / BET_STEP) * BET_STEP;
+    }
+
+    /// <summary>
     /// 左右モンスターの名前と画像を表示する
     /// </summary>
     private void SetupMonsterViews()
@@ -239,14 +297,12 @@ public class BetSceneController : MonoBehaviour
         MonsterData leftMonster = GameSession.Instance.LeftMonster;
         MonsterData rightMonster = GameSession.Instance.RightMonster;
 
-        // 左側表示
         leftCharaNameText.text = leftMonster.Name;
         if (leftCharaImage != null)
         {
             leftCharaImage.sprite = leftMonster.Icon;
         }
 
-        // 右側表示
         rightCharaNameText.text = rightMonster.Name;
         if (rightCharaImage != null)
         {
@@ -261,10 +317,7 @@ public class BetSceneController : MonoBehaviour
     {
         if (leftSelectButton == null || rightSelectButton == null) return;
 
-        // 通常色
         Color normalColor = Color.white;
-
-        // 選択中色
         Color selectedColor = new Color(1f, 0.9f, 0.4f);
 
         Image leftButtonImage = leftSelectButton.GetComponent<Image>();
@@ -272,7 +325,6 @@ public class BetSceneController : MonoBehaviour
 
         if (leftButtonImage == null || rightButtonImage == null) return;
 
-        // 未選択なら両方通常色
         if (!hasSelectedSide)
         {
             leftButtonImage.color = normalColor;
@@ -280,7 +332,6 @@ public class BetSceneController : MonoBehaviour
             return;
         }
 
-        // 選択側だけ強調する
         if (selectedSide == PredictionSide.Left)
         {
             leftButtonImage.color = selectedColor;
@@ -300,11 +351,19 @@ public class BetSceneController : MonoBehaviour
     {
         if (!hasSelectedSide) return;
 
+        // 左右の強さから倍率を決定する
+        float payoutMultiplier = BetOddsCalculator.CalculatePayoutMultiplier(
+            GameSession.Instance.LeftMonster,
+            GameSession.Instance.RightMonster,
+            selectedSide
+        );
+
         BetData betData = new BetData
         {
             Side = selectedSide,
-            Amount = BET_AMOUNT,
-            InspectLevel = InspectLevel.Full
+            Amount = currentBetAmount,
+            InspectLevel = InspectLevel.Full,
+            PayoutMultiplier = payoutMultiplier
         };
 
         GameSession.Instance.SetBet(betData);
