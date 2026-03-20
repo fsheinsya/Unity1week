@@ -214,12 +214,12 @@ TextureImporter:
       name: slimeGray_0
       rect:
         serializedVersion: 2
-        x: 69
-        y: 279
-        width: 22
-        height: 22
+        x: 0
+        y: 160
+        width: 160
+        height: 160
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -236,12 +236,12 @@ TextureImporter:
       name: slimeGray_1
       rect:
         serializedVersion: 2
-        x: 109
-        y: 289
-        width: 17
-        height: 17
+        x: 0
+        y: 0
+        width: 160
+        height: 160
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -254,231 +254,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: slimeGray_2
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 254
-        width: 22
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 07ae6619077ea41f0800000000000000
-      internalID: -1059780291630536080
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeGray_3
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 259
-        width: 17
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2ee7c5e45b2197310800000000000000
-      internalID: 1403173328815685346
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeGray_4
-      rect:
-        serializedVersion: 2
-        x: 29
-        y: 169
-        width: 127
-        height: 82
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 44cb67447f4fbdfa0800000000000000
-      internalID: -5774752754329797564
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeGray_5
-      rect:
-        serializedVersion: 2
-        x: 44
-        y: 99
-        width: 37
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 79c3ccfc381e9b8b0800000000000000
-      internalID: -5135825943796106089
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeGray_6
-      rect:
-        serializedVersion: 2
-        x: 109
-        y: 129
-        width: 17
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9251a2cc16b8f64e0800000000000000
-      internalID: -1986215658493700823
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeGray_7
-      rect:
-        serializedVersion: 2
-        x: 89
-        y: 109
-        width: 17
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b7f9d9c6fe96588a0800000000000000
-      internalID: -6303515626394771589
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeGray_8
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 79
-        width: 22
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 682be8cdc22688470800000000000000
-      internalID: 8397069450050712198
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeGray_9
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 79
-        width: 22
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9106f1a60a1cee660800000000000000
-      internalID: 7417078531045154841
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeGray_10
-      rect:
-        serializedVersion: 2
-        x: 99
-        y: 89
-        width: 17
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f4343e93e1871c7c0800000000000000
-      internalID: -4052826118441188529
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeGray_11
-      rect:
-        serializedVersion: 2
-        x: 29
-        y: 9
-        width: 127
-        height: 72
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3d493138ee570a7f0800000000000000
-      internalID: -603352682805881645
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: ed0f8b517b3d46c43b7fd9a14b9429ce
     internalID: 0
     vertices: []
     indices: 
@@ -486,20 +266,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":160.0,"y":160.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       slimeGray_0: 4345143378608082979
       slimeGray_1: 3726175892463765120
-      slimeGray_10: -4052826118441188529
-      slimeGray_11: -603352682805881645
-      slimeGray_2: -1059780291630536080
-      slimeGray_3: 1403173328815685346
-      slimeGray_4: -5774752754329797564
-      slimeGray_5: -5135825943796106089
-      slimeGray_6: -1986215658493700823
-      slimeGray_7: -6303515626394771589
-      slimeGray_8: 8397069450050712198
-      slimeGray_9: 7417078531045154841
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

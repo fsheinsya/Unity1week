@@ -1,26 +1,22 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using System.Collections.Generic;
 
 /// <summary>
-/// Betシーンの詳細ステータス画面を表示するクラス
-/// ・キャラ画像
-/// ・基本能力値
-/// ・属性
-/// ・オッズ
-/// ・性格
-/// ・スキル一覧
-/// を表示する
+/// ステータス詳細UI（左右キャラ対応版🔥）
 /// </summary>
 public class BetStatusDetailView : MonoBehaviour
 {
-    [Header("画面全体をまとめる親")]
     [SerializeField] private GameObject rootObject;
 
-    [Header("左のキャラ画像")]
-    [SerializeField] private Image charaImage;
+    [Header("キャラ画像")]
+    [SerializeField] private Image leftcharaImage;
+    [SerializeField] private Image rightcharaImage;
 
-    [Header("能力値表示")]
+    [Header("能力値（左基準）")]
     [SerializeField] private TMP_Text hpText;
     [SerializeField] private TMP_Text defenseText;
     [SerializeField] private TMP_Text attackText;
@@ -29,159 +25,227 @@ public class BetStatusDetailView : MonoBehaviour
     [SerializeField] private TMP_Text accuracyText;
     [SerializeField] private TMP_Text evasionText;
 
-    [Header("追加情報表示")]
+    [Header("追加")]
     [SerializeField] private TMP_Text elementText;
     [SerializeField] private TMP_Text oddsText;
     [SerializeField] private TMP_Text personalityText;
 
-    [Header("スキル表示")]
+    [Header("スキル")]
     [SerializeField] private TMP_Text skillText1;
     [SerializeField] private TMP_Text skillText2;
 
-    /// <summary>
-    /// 詳細画面を表示する
-    /// </summary>
+    [Header("スライド")]
+    [SerializeField] private RectTransform statusPanel;
+    [SerializeField] private RectTransform elementPanel;
+    [SerializeField] private RectTransform oddsPanel;
+    [SerializeField] private RectTransform personalityPanel;
+    [SerializeField] private RectTransform skillPanel1;
+    [SerializeField] private RectTransform skillPanel2;
+
+    private Dictionary<RectTransform, Vector2> originalPos = new();
+    private bool hasPlayedAnimation = false;
+
+    private void Awake()
+    {
+        Cache();
+        HideAll();
+    }
+
+    private void Cache()
+    {
+        Save(statusPanel);
+        Save(elementPanel);
+        Save(oddsPanel);
+        Save(personalityPanel);
+        Save(skillPanel1);
+        Save(skillPanel2);
+    }
+
+    private void Save(RectTransform r)
+    {
+        if (r != null && !originalPos.ContainsKey(r))
+            originalPos[r] = r.anchoredPosition;
+    }
+
+    private void HideAll()
+    {
+        Set(statusPanel, false);
+        Set(elementPanel, false);
+        Set(oddsPanel, false);
+        Set(personalityPanel, false);
+        Set(skillPanel1, false);
+        Set(skillPanel2, false);
+    }
+
+    private void Set(RectTransform r, bool v)
+    {
+        if (r != null) r.gameObject.SetActive(v);
+    }
+
     public void Open()
     {
-        if (rootObject != null)
-        {
-            rootObject.SetActive(true);
-        }
-        else
-        {
-            gameObject.SetActive(true);
-        }
+        rootObject?.SetActive(true);
     }
 
-    /// <summary>
-    /// 詳細画面を閉じる
-    /// </summary>
     public void Close()
     {
-        if (rootObject != null)
+        rootObject?.SetActive(false);
+
+        // キャラだけリセット
+        leftcharaImage.transform.localScale = Vector3.one;
+        rightcharaImage.transform.localScale = Vector3.one;
+    }
+
+    // =========================
+    // 🔥 表示（左右対応）
+    // =========================
+    public void Show(MonsterData left, MonsterData right, float odds)
+    {
+        // 左キャラ
+        leftcharaImage.sprite = left.Icon;
+        leftcharaImage.enabled = true;
+        leftcharaImage.color = Color.white;
+
+        // 右キャラ（反転🔥）
+        rightcharaImage.sprite = right.Icon;
+        rightcharaImage.enabled = true;
+        rightcharaImage.color = Color.white;
+
+        // 🔥 サイズ＆向き
+        leftcharaImage.rectTransform.localScale = new Vector3(2f, 2f, 1f);
+        rightcharaImage.rectTransform.localScale = new Vector3(2f, 2f, 1f);//こっちは反転しなくていい
+
+        // 能力値（左ベース）
+        hpText.text = $"HP:{left.Stats.MaxHp}";
+        defenseText.text = $"防御:{left.Stats.Defense}";
+        attackText.text = $"攻撃:{left.Stats.Attack}";
+        growthText.text = $"成長:{left.Stats.Growth}";
+        speedText.text = $"素早さ:{left.Stats.Speed}";
+        accuracyText.text = $"命中:{left.Stats.Accuracy}";
+        evasionText.text = $"回避:{left.Stats.Evasion}";
+
+        elementText.text = GetElementName(left.Element);
+        oddsText.text = $"オッズ:{odds:F1}";
+        personalityText.text = GetPersonalityName(left.Personality);
+
+        skillText1.text = GetSkillName(left, 0);
+        skillText2.text = GetSkillName(left, 1);
+    }
+
+    // =========================
+    // 🔥 アニメーション
+    // =========================
+    public async UniTask PlayOpenAnimation(MonsterData left, MonsterData right, float odds)
+    {
+        Open();
+        Show(left, right, odds);
+
+        // 🔥 2回目以降は何もしない（そのまま表示）
+        if (hasPlayedAnimation)
+            return;
+
+        hasPlayedAnimation = true;
+
+        // 🔥 初回だけ非表示スタート
+        HideAll();
+
+        // キャラポップ
+        leftcharaImage.transform.localScale = Vector3.zero;
+        rightcharaImage.transform.localScale = Vector3.zero;
+
+        await UniTask.WhenAll(
+            leftcharaImage.transform.DOScale(2f, 0.3f).SetEase(Ease.OutBack).AsyncWaitForCompletion().AsUniTask(),
+            rightcharaImage.transform.DOScale(2f, 0.3f).SetEase(Ease.OutBack).AsyncWaitForCompletion().AsUniTask()
+        );
+
+        // 初回だけスライド
+        await Slide(statusPanel);
+        await Slide(elementPanel);
+        await Slide(oddsPanel);
+        await Slide(personalityPanel);
+        await Slide(skillPanel1);
+        await Slide(skillPanel2);
+    }
+
+    private void ShowAllPanelsInstant()
+    {
+        Set(statusPanel, true);
+        Set(elementPanel, true);
+        Set(oddsPanel, true);
+        Set(personalityPanel, true);
+        Set(skillPanel1, true);
+        Set(skillPanel2, true);
+
+        // 🔥 正しい位置に戻す（超重要）
+        ResetPosition(statusPanel);
+        ResetPosition(elementPanel);
+        ResetPosition(oddsPanel);
+        ResetPosition(personalityPanel);
+        ResetPosition(skillPanel1);
+        ResetPosition(skillPanel2);
+    }
+
+    private void ResetPosition(RectTransform r)
+    {
+        if (r != null && originalPos.ContainsKey(r))
         {
-            rootObject.SetActive(false);
-        }
-        else
-        {
-            gameObject.SetActive(false);
+            r.anchoredPosition = originalPos[r];
         }
     }
 
-    /// <summary>
-    /// 画面表示を初期化する
-    /// </summary>
-    public void Clear()
+    private async UniTask Slide(RectTransform r)
     {
-        if (hpText != null) hpText.text = "HP:----";
-        if (defenseText != null) defenseText.text = "防御力:----";
-        if (attackText != null) attackText.text = "攻撃力:----";
-        if (growthText != null) growthText.text = "成長率:----";
-        if (speedText != null) speedText.text = "素早さ:----";
-        if (accuracyText != null) accuracyText.text = "命中率:----";
-        if (evasionText != null) evasionText.text = "回避率:----";
-        if (elementText != null) elementText.text = "属性：無";
-        if (oddsText != null) oddsText.text = "オッズ: 0.0";
-        if (personalityText != null) personalityText.text = "なし";
-        if (skillText1 != null) skillText1.text = "スキル";
-        if (skillText2 != null) skillText2.text = "スキル";
+        if (r == null) return;
+
+        Vector2 target = originalPos[r];
+
+        r.gameObject.SetActive(true);
+        r.anchoredPosition = new Vector2(target.x + 800f, target.y);
+
+        await r.DOAnchorPos(target, 0.4f)
+            .SetEase(Ease.OutCubic)
+            .AsyncWaitForCompletion();
+
+        await UniTask.Delay(30);//30固定
     }
 
-    /// <summary>
-    /// 指定したモンスターの詳細情報を表示する
-    /// </summary>
-    /// <param name="data">表示したいモンスター</param>
-    /// <param name="odds">このモンスターに賭けた時のオッズ倍率</param>
-    public void Show(MonsterData data, float odds)
+    // =========================
+    // データ
+    // =========================
+    private string GetSkillName(MonsterData data, int i)
     {
-        // キャラ画像
-        if (charaImage != null)
-        {
-            charaImage.sprite = data.Icon;
-        }
+        if (data.Skills == null || i >= data.Skills.Count)
+            return "スキルなし";
 
-        // 能力値
-        if (hpText != null) hpText.text = $"HP:{data.Stats.MaxHp}";
-        if (defenseText != null) defenseText.text = $"防御力:{data.Stats.Defense}";
-        if (attackText != null) attackText.text = $"攻撃力:{data.Stats.Attack}";
-        if (growthText != null) growthText.text = $"成長率:{data.Stats.Growth}";
-        if (speedText != null) speedText.text = $"素早さ:{data.Stats.Speed}";
-        if (accuracyText != null) accuracyText.text = $"命中率:{data.Stats.Accuracy}";
-        if (evasionText != null) evasionText.text = $"回避率:{data.Stats.Evasion}";
-
-        // 属性
-        if (elementText != null)
-        {
-            elementText.text = $"{GetElementName(data.Element)}";
-        }
-
-        // オッズ
-        if (oddsText != null)
-        {
-            oddsText.text = $"{odds:F1}";
-        }
-
-        // 性格
-        if (personalityText != null)
-        {
-            personalityText.text = GetPersonalityName(data.Personality);
-        }
-
-        // スキル
-        if (skillText1 != null)
-        {
-            skillText1.text = GetSkillName(data, 0);
-        }
-
-        if (skillText2 != null)
-        {
-            skillText2.text = GetSkillName(data, 1);
-        }
+        return data.Skills[i].SkillName;
     }
 
-    /// <summary>
-    /// 指定インデックスのスキル名を返す
-    /// </summary>
-    private string GetSkillName(MonsterData data, int index)
+    private string GetElementName(ElementType e)
     {
-        if (data.Skills == null) return "スキルなし";
-        if (index < 0 || index >= data.Skills.Count) return "スキルなし";
-
-        return data.Skills[index].SkillName;
+        return e switch
+        {
+            ElementType.Fire => "炎",
+            ElementType.Water => "水",
+            ElementType.Grass => "草",
+            ElementType.Thunder => "雷",
+            ElementType.Rock => "岩",
+            ElementType.Dark => "闇",
+            ElementType.Light => "光",
+            _ => "無"
+        };
     }
 
-    /// <summary>
-    /// 属性の日本語名を返す
-    /// </summary>
-    private string GetElementName(ElementType element)
+    private string GetPersonalityName(PersonalityType p)
     {
-        switch (element)
+        return p switch
         {
-            case ElementType.Fire: return "炎";
-            case ElementType.Water: return "水";
-            case ElementType.Grass: return "草";
-            case ElementType.Thunder: return "雷";
-            case ElementType.Rock: return "岩";
-            case ElementType.Dark: return "闇";
-            case ElementType.Light: return "光";
-            default: return "無";
-        }
-    }
-
-    /// <summary>
-    /// 性格の日本語名を返す
-    /// </summary>
-    private string GetPersonalityName(PersonalityType type)
-    {
-        switch (type)
-        {
-            case PersonalityType.Bold: return "大胆";
-            case PersonalityType.Calm: return "冷静";
-            case PersonalityType.Flexible: return "柔軟";
-            case PersonalityType.Taunt: return "挑発";
-            case PersonalityType.Aggressive: return "積極的";
-            case PersonalityType.Timid: return "臆病";
-            default: return "なし";
-        }
+            PersonalityType.Bold => "大胆",
+            PersonalityType.Calm => "冷静",
+            PersonalityType.Flexible => "柔軟",
+            PersonalityType.Taunt => "挑発",
+            PersonalityType.Aggressive => "積極的",
+            PersonalityType.Timid => "臆病",
+            _ => "なし"
+        };
     }
 }

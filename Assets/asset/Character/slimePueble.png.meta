@@ -214,12 +214,12 @@ TextureImporter:
       name: slimePueble_0
       rect:
         serializedVersion: 2
-        x: 69
-        y: 279
-        width: 22
-        height: 22
+        x: 0
+        y: 160
+        width: 160
+        height: 160
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -236,12 +236,12 @@ TextureImporter:
       name: slimePueble_1
       rect:
         serializedVersion: 2
-        x: 109
-        y: 289
-        width: 17
-        height: 17
+        x: 0
+        y: 0
+        width: 160
+        height: 160
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -254,231 +254,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: slimePueble_2
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 254
-        width: 22
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 53c985ab6ad23f9a0800000000000000
-      internalID: -6200562067844850635
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimePueble_3
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 259
-        width: 17
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9fdc15e16d3995cf0800000000000000
-      internalID: -263016555383501319
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimePueble_4
-      rect:
-        serializedVersion: 2
-        x: 29
-        y: 169
-        width: 127
-        height: 82
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b39a413c7537de7c0800000000000000
-      internalID: -4040446469909206725
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimePueble_5
-      rect:
-        serializedVersion: 2
-        x: 44
-        y: 99
-        width: 37
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ea4e4a8eb259cbe10800000000000000
-      internalID: 2214809132578694318
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimePueble_6
-      rect:
-        serializedVersion: 2
-        x: 109
-        y: 129
-        width: 17
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b8b1dd5db58da7740800000000000000
-      internalID: 5150667012793244555
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimePueble_7
-      rect:
-        serializedVersion: 2
-        x: 89
-        y: 109
-        width: 17
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8bccafb480e5267e0800000000000000
-      internalID: -1773751913503077192
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimePueble_8
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 79
-        width: 22
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 325c6baa5af344b20800000000000000
-      internalID: 3117686822813484323
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimePueble_9
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 79
-        width: 22
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0866418f88c1d6510800000000000000
-      internalID: 1543921621861164672
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimePueble_10
-      rect:
-        serializedVersion: 2
-        x: 99
-        y: 89
-        width: 17
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3d9486690f876f590800000000000000
-      internalID: -7640786743076566573
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimePueble_11
-      rect:
-        serializedVersion: 2
-        x: 29
-        y: 9
-        width: 127
-        height: 72
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 403d83bde7ef23e00800000000000000
-      internalID: 1023159886163792644
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 92e4ca6c2e6667b4e9164f20e07ddbd3
     internalID: 0
     vertices: []
     indices: 
@@ -486,20 +266,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":160.0,"y":160.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       slimePueble_0: 838662039281341075
       slimePueble_1: -1365362455015332401
-      slimePueble_10: -7640786743076566573
-      slimePueble_11: 1023159886163792644
-      slimePueble_2: -6200562067844850635
-      slimePueble_3: -263016555383501319
-      slimePueble_4: -4040446469909206725
-      slimePueble_5: 2214809132578694318
-      slimePueble_6: 5150667012793244555
-      slimePueble_7: -1773751913503077192
-      slimePueble_8: 3117686822813484323
-      slimePueble_9: 1543921621861164672
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

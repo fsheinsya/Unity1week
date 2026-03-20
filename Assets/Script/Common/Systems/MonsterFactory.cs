@@ -3,7 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// モンスター生成クラス
-/// UIに出したいパラメータをここで全部埋める
+/// 第2引数で渡された画像を、そのままモンスター画像として使う
 /// </summary>
 public class MonsterFactory
 {
@@ -12,17 +12,17 @@ public class MonsterFactory
     /// </summary>
     public MonsterData CreateRandom(string monsterName, Sprite icon = null)
     {
-        // 基本能力値をランダム生成
-        int hp = Random.Range(45, 99);
+        // 基本能力値をランダム生成する
+        int hp = Random.Range(45, 91);
         int atk = Random.Range(8, 26);
         int def = Random.Range(8, 26);
         int growth = Random.Range(5, 31);
-        int speed = Random.Range(5, 31);
+        int speed = Random.Range(5, 26);
         int accuracy = Random.Range(65, 96);
-        int evasion = Random.Range(2, 10);
-        int critical = Random.Range(5, 14);
+        int evasion = Random.Range(5, 26);
+        int critical = Random.Range(5, 21);
 
-        // 属性、性格、特殊能力をランダムで決める
+        // 属性、性格、特殊能力をランダム決定する
         ElementType element = GetRandomElement();
         PersonalityType personality = GetRandomPersonality();
         SpecialAbilityType specialAbility = GetRandomSpecialAbility();
@@ -34,11 +34,11 @@ public class MonsterFactory
             CreateSkillByPersonality(personality, element, 1)
         };
 
-        // モンスターを返す
+        // モンスター情報を作って返す
         return new MonsterData
         {
             Name = monsterName,
-            Icon = icon,
+            Icon = icon, // ← ここにスライム画像が入る
             Stats = new MonsterStats
             {
                 MaxHp = hp,
@@ -65,7 +65,7 @@ public class MonsterFactory
     }
 
     /// <summary>
-    /// ランダム属性
+    /// 属性をランダムに決める
     /// </summary>
     private ElementType GetRandomElement()
     {
@@ -74,7 +74,7 @@ public class MonsterFactory
     }
 
     /// <summary>
-    /// ランダム性格
+    /// 性格をランダムに決める
     /// </summary>
     private PersonalityType GetRandomPersonality()
     {
@@ -83,7 +83,7 @@ public class MonsterFactory
     }
 
     /// <summary>
-    /// ランダム特殊能力
+    /// 特殊能力をランダムに決める
     /// </summary>
     private SpecialAbilityType GetRandomSpecialAbility()
     {
@@ -96,7 +96,6 @@ public class MonsterFactory
     /// </summary>
     private SkillData CreateSkillByPersonality(PersonalityType personality, ElementType element, int index)
     {
-        // 基本スキル
         SkillData normalAttack = new SkillData
         {
             SkillName = "通常攻撃",
@@ -105,10 +104,8 @@ public class MonsterFactory
             SuccessRate = 100
         };
 
-        // 属性魔法
         SkillData elementSkill = CreateElementSkill(element);
 
-        // 性格ごとにスキル傾向を変える
         switch (personality)
         {
             case PersonalityType.Bold:

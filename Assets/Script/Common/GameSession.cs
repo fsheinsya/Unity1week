@@ -8,10 +8,14 @@ using UnityEngine;
 /// ・左右モンスター情報の保持
 /// ・賭け情報の保持
 /// ・試合結果の保持
+/// ・スライム画像のランダム選択
 /// </summary>
 public class GameSession : MonoBehaviour
 {
     public static GameSession Instance { get; private set; }
+
+    [Header("プレイヤー側・敵側で使うスライム画像一覧")]
+    [SerializeField] private Sprite[] slimeSprites;
 
     // 現在の所持コイン
     public int CurrentCoin { get; private set; } = 100;
@@ -34,7 +38,7 @@ public class GameSession : MonoBehaviour
     // 直前の試合結果
     public MatchResultData CurrentMatchResult { get; private set; }
 
-    // モンスター生成用クラス
+    // モンスター生成用
     private MonsterFactory monsterFactory;
 
     /// <summary>
@@ -57,43 +61,97 @@ public class GameSession : MonoBehaviour
 
     /// <summary>
     /// 新しいゲームを開始する
-    /// タイトルから開始するときに呼ぶ
     /// </summary>
     public void StartNewGame()
     {
-        // 初期コインに戻す
         CurrentCoin = 100;
-
-        // 1試合目に戻す
         CurrentRound = 1;
-
-        // 最大3試合固定
         MaxRound = 3;
 
-        // 賭け情報と結果を初期化
         CurrentBet = null;
         CurrentMatchResult = null;
 
-        // 最初の対戦カードを生成する
         GenerateNewMatch();
     }
 
     /// <summary>
     /// 新しい対戦カードを生成する
+    /// 毎回スライム画像をランダムで選ぶ
     /// </summary>
     public void GenerateNewMatch()
     {
-        // 左右のモンスターを新しく作る
-        LeftMonster = monsterFactory.CreateRandom("Left Monster");
-        RightMonster = monsterFactory.CreateRandom("Right Monster");
+        // スライム画像が未設定なら、nullで生成する
+        if (slimeSprites == null || slimeSprites.Length == 0)
+        {
+            LeftMonster = monsterFactory.CreateRandom("Left Slime", null);
+            RightMonster = monsterFactory.CreateRandom("Right Slime", null);
 
-        // 前回の賭け情報と結果は消しておく
+            CurrentBet = null;
+            CurrentMatchResult = null;
+            return;
+        }
+
+        // 左右で別の画像を選ぶ
+        Sprite leftSprite = GetRandomSlimeSprite();
+        Sprite rightSprite = GetRandomDifferentSlimeSprite(leftSprite);
+
+        // 名前も色っぽく変えたいなら sprite.name を使う
+        LeftMonster = monsterFactory.CreateRandom(GetMonsterNameFromSprite(leftSprite), leftSprite);
+        RightMonster = monsterFactory.CreateRandom(GetMonsterNameFromSprite(rightSprite), rightSprite);
+
         CurrentBet = null;
         CurrentMatchResult = null;
     }
 
     /// <summary>
-    /// 現在の賭け情報を保存する
+    /// 配列からランダムに1枚スライム画像を選ぶ
+    /// </summary>
+    private Sprite GetRandomSlimeSprite()
+    {
+        int index = Random.Range(0, slimeSprites.Length);
+        return slimeSprites[index];
+    }
+
+    /// <summary>
+    /// 指定画像と異なる画像をランダムに選ぶ
+    /// 画像が1枚しかない場合は同じ画像を返す
+    /// </summary>
+    private Sprite GetRandomDifferentSlimeSprite(Sprite excludeSprite)
+    {
+        // 1枚しかないなら同じものを返す
+        if (slimeSprites.Length <= 1)
+        {
+            return slimeSprites[0];
+        }
+
+        Sprite selected = excludeSprite;
+
+        // 同じ画像が出なくなるまで引き直す
+        while (selected == excludeSprite)
+        {
+            selected = GetRandomSlimeSprite();
+        }
+
+        return selected;
+    }
+
+    /// <summary>
+    /// Sprite名から表示用のモンスター名を作る
+    /// </summary>
+    private string GetMonsterNameFromSprite(Sprite sprite)
+    {
+        if (sprite == null)
+        {
+            return "Slime";
+        }
+
+        // 例: slimeBlue → slimeBlue
+        // 必要ならここで日本語名に変えてもOK
+        return sprite.name;
+    }
+
+    /// <summary>
+    /// 賭け情報を保存する
     /// </summary>
     public void SetBet(BetData betData)
     {
@@ -102,17 +160,12 @@ public class GameSession : MonoBehaviour
 
     /// <summary>
     /// コインを消費する
-    /// 足りない場合は false を返す
     /// </summary>
     public bool TryConsumeCoin(int amount)
     {
-        // マイナス値は無効
         if (amount < 0) return false;
-
-        // 所持金不足なら失敗
         if (CurrentCoin < amount) return false;
 
-        // コインを減らす
         CurrentCoin -= amount;
         return true;
     }
@@ -122,14 +175,12 @@ public class GameSession : MonoBehaviour
     /// </summary>
     public void AddCoin(int amount)
     {
-        // マイナス加算はしない
         if (amount < 0) return;
-
         CurrentCoin += amount;
     }
 
     /// <summary>
-    /// 今回の試合結果を保存する
+    /// 試合結果を保存する
     /// </summary>
     public void SetMatchResult(MatchResultData result)
     {
@@ -137,7 +188,7 @@ public class GameSession : MonoBehaviour
     }
 
     /// <summary>
-    /// 今が最終試合かどうかを返す
+    /// 最終ラウンドかどうかを返す
     /// </summary>
     public bool IsLastRound()
     {
@@ -146,14 +197,10 @@ public class GameSession : MonoBehaviour
 
     /// <summary>
     /// 次の試合へ進む
-    /// ラウンド数を1つ進めて、新しい対戦カードを作る
     /// </summary>
     public void NextRound()
     {
-        // 次の試合番号へ進める
         CurrentRound++;
-
-        // 新しい対戦カードを生成する
         GenerateNewMatch();
     }
 }

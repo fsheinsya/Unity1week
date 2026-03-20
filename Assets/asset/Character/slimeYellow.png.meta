@@ -214,12 +214,12 @@ TextureImporter:
       name: slimeYellow_0
       rect:
         serializedVersion: 2
-        x: 69
-        y: 279
-        width: 22
-        height: 22
+        x: 0
+        y: 160
+        width: 160
+        height: 160
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -236,12 +236,12 @@ TextureImporter:
       name: slimeYellow_1
       rect:
         serializedVersion: 2
-        x: 109
-        y: 289
-        width: 17
-        height: 17
+        x: 0
+        y: 0
+        width: 160
+        height: 160
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -254,231 +254,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: slimeYellow_2
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 254
-        width: 22
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c6cd89b9b766756c0800000000000000
-      internalID: -4154739450148496276
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeYellow_3
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 259
-        width: 17
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f347b592c6e2a7b60800000000000000
-      internalID: 7744553551302194239
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeYellow_4
-      rect:
-        serializedVersion: 2
-        x: 29
-        y: 169
-        width: 127
-        height: 82
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d3c58e33cf581d890800000000000000
-      internalID: -7435014191562859459
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeYellow_5
-      rect:
-        serializedVersion: 2
-        x: 44
-        y: 99
-        width: 37
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a4bc657c74ed17e10800000000000000
-      internalID: 2193778893374540618
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeYellow_6
-      rect:
-        serializedVersion: 2
-        x: 109
-        y: 129
-        width: 17
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4b265568ff93301e0800000000000000
-      internalID: -2232877220612447564
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeYellow_7
-      rect:
-        serializedVersion: 2
-        x: 89
-        y: 109
-        width: 17
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4a72d5deadb9d1110800000000000000
-      internalID: 1233313237556864932
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeYellow_8
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 79
-        width: 22
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7413abc1669ab10c0800000000000000
-      internalID: -4603899938022477497
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeYellow_9
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 79
-        width: 22
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d3a766a3d87eac330800000000000000
-      internalID: 3732049834986076733
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeYellow_10
-      rect:
-        serializedVersion: 2
-        x: 99
-        y: 89
-        width: 17
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 71ebd8a6488b1c9d0800000000000000
-      internalID: -2755718618111164905
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeYellow_11
-      rect:
-        serializedVersion: 2
-        x: 29
-        y: 9
-        width: 127
-        height: 72
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6c8d04805797bbf00800000000000000
-      internalID: 1133633274770413766
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 9f2d332e6bdd010428adda99792ff344
     internalID: 0
     vertices: []
     indices: 
@@ -486,20 +266,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":160.0,"y":160.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       slimeYellow_0: -1530893602457906192
       slimeYellow_1: 3400408173405173669
-      slimeYellow_10: -2755718618111164905
-      slimeYellow_11: 1133633274770413766
-      slimeYellow_2: -4154739450148496276
-      slimeYellow_3: 7744553551302194239
-      slimeYellow_4: -7435014191562859459
-      slimeYellow_5: 2193778893374540618
-      slimeYellow_6: -2232877220612447564
-      slimeYellow_7: 1233313237556864932
-      slimeYellow_8: -4603899938022477497
-      slimeYellow_9: 3732049834986076733
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

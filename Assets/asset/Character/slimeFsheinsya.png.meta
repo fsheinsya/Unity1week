@@ -214,12 +214,12 @@ TextureImporter:
       name: slimeFsheinsya_0
       rect:
         serializedVersion: 2
-        x: 69
-        y: 279
-        width: 22
-        height: 22
+        x: 0
+        y: 160
+        width: 160
+        height: 160
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -236,12 +236,12 @@ TextureImporter:
       name: slimeFsheinsya_1
       rect:
         serializedVersion: 2
-        x: 109
-        y: 289
-        width: 17
-        height: 17
+        x: 0
+        y: 0
+        width: 160
+        height: 160
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -254,231 +254,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: slimeFsheinsya_2
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 254
-        width: 22
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8a42cefa8003ca800800000000000000
-      internalID: 624927262167016616
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeFsheinsya_3
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 259
-        width: 17
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 32ee325bbc6c5aef0800000000000000
-      internalID: -97453238698906077
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeFsheinsya_4
-      rect:
-        serializedVersion: 2
-        x: 29
-        y: 169
-        width: 127
-        height: 82
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 87db3bcf98a3a9180800000000000000
-      internalID: -9107902932078838408
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeFsheinsya_5
-      rect:
-        serializedVersion: 2
-        x: 44
-        y: 99
-        width: 37
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a5c90bff4c09aada0800000000000000
-      internalID: -5932770383329452966
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeFsheinsya_6
-      rect:
-        serializedVersion: 2
-        x: 109
-        y: 129
-        width: 17
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a8720437f846482d0800000000000000
-      internalID: -3277384061542193270
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeFsheinsya_7
-      rect:
-        serializedVersion: 2
-        x: 89
-        y: 109
-        width: 17
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: dfe813e7e9dfa39d0800000000000000
-      internalID: -2793641761666134275
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeFsheinsya_8
-      rect:
-        serializedVersion: 2
-        x: 34
-        y: 79
-        width: 22
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8b9623920ddeabc70800000000000000
-      internalID: 8987757484671396280
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeFsheinsya_9
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 79
-        width: 22
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b70e0e0e3acdfb380800000000000000
-      internalID: -8953194937778642821
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeFsheinsya_10
-      rect:
-        serializedVersion: 2
-        x: 99
-        y: 89
-        width: 17
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 61ad26247acc2b640800000000000000
-      internalID: 5094359147254831638
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: slimeFsheinsya_11
-      rect:
-        serializedVersion: 2
-        x: 29
-        y: 9
-        width: 127
-        height: 72
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5daa63d8db5e8d880800000000000000
-      internalID: -8585860087301100843
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f8b12769a02628e41b97887d60539ba3
     internalID: 0
     vertices: []
     indices: 
@@ -486,20 +266,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":160.0,"y":160.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       slimeFsheinsya_0: -4168233794015218660
       slimeFsheinsya_1: -2666363068159471393
-      slimeFsheinsya_10: 5094359147254831638
-      slimeFsheinsya_11: -8585860087301100843
-      slimeFsheinsya_2: 624927262167016616
-      slimeFsheinsya_3: -97453238698906077
-      slimeFsheinsya_4: -9107902932078838408
-      slimeFsheinsya_5: -5932770383329452966
-      slimeFsheinsya_6: -3277384061542193270
-      slimeFsheinsya_7: -2793641761666134275
-      slimeFsheinsya_8: 8987757484671396280
-      slimeFsheinsya_9: -8953194937778642821
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,32 +1,59 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
+using TMPro;
+using DG.Tweening;
+using System;
 
-/// <summary>
-/// Titleシーン全体の進行を管理するクラス
-/// 主な役割は「ゲーム開始ボタンが押されたら新しいゲームを始めて Bet シーンへ移動すること」
-/// </summary>
 public class TitleSceneController : MonoBehaviour
 {
-    //画面をクリックをしたら
+    [Header("使用UI")]
+    [SerializeField] private TextMeshProUGUI title;
+    [SerializeField] private TextMeshProUGUI click;
+
+    float waitTime = 1f;
+
+    // 連打防止フラグ
+    private bool isTransitioning = false;
+
+    void Start()
+    {
+        title.alpha = 0f;
+        click.alpha = 0f;
+
+        TitleUIAnim().Forget();
+    }
+
     void Update()
     {
-      if(Input.GetMouseButtonDown(0)　|| Input.GetMouseButtonDown(1))
+        if (isTransitioning) return;
+
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
-            OnClickStartGame();
+            OnClickStartGame().Forget();
         }
     }
 
-    /// <summary>
-    /// Startボタンから呼ばれるメソッド
-    /// ゲーム状態を初期化して、Betシーンへ移動する
-    /// </summary>
-    public void OnClickStartGame()
+    public async UniTask OnClickStartGame()
     {
-        // GameSession に新規ゲーム開始を依頼する
-        // ここでコイン数・ラウンド数・対戦カードなどが初期化される
-        GameSession.Instance.StartNewGame();
+        isTransitioning = true;
 
-        // 賭け画面へ移動する
+        await title.DOFade(0f, 0.5f).AsyncWaitForCompletion();
+        await click.DOFade(0f, 0.5f).AsyncWaitForCompletion();
+
+        GameSession.Instance.StartNewGame();
         SceneManager.LoadScene(SceneNames.Bet);
+    }
+
+    public async UniTask TitleUIAnim()
+    {
+        // フェードイン完了まで待つ
+        await title.DOFade(1f, 1f).AsyncWaitForCompletion();
+
+        await UniTask.Delay(TimeSpan.FromSeconds(waitTime));
+
+        click.alpha = 1f;
+        click.DOFade(0.3f, 0.8f)
+            .SetLoops(-1, LoopType.Yoyo);
     }
 }

@@ -1,68 +1,74 @@
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// Betシーン全体を管理するクラス
-/// ・コイン表示
-/// ・左右キャラ表示
-/// ・左右それぞれの詳細ステータス画面表示
-/// ・賭け金調整
-/// ・左右どちらに賭けるか選択
-/// ・Battleシーンへの移動
-/// を担当する
+/// Betシーン管理（長押し対応版🔥）
 /// </summary>
 public class BetSceneController : MonoBehaviour
 {
-    [Header("上部表示")]
+    private enum UIState
+    {
+        Select,
+        Status
+    }
+
+    private UIState currentState;
+
+    [Header("上部")]
     [SerializeField] private TMP_Text coinText;
 
-    [Header("左側UI")]
-    [SerializeField] private TMP_Text leftCharaNameText;
-    [SerializeField] private Image leftCharaImage;
-    [SerializeField] private Button leftStatusButton;
-    [SerializeField] private Button leftSelectButton;
+    [Header("左")]
+    [SerializeField] private TMP_Text leftName;
+    [SerializeField] private Image leftImage;
+    [SerializeField] private Button leftStatusBtn;
+    [SerializeField] private Button leftSelectBtn;
 
-    [Header("右側UI")]
-    [SerializeField] private TMP_Text rightCharaNameText;
-    [SerializeField] private Image rightCharaImage;
-    [SerializeField] private Button rightStatusButton;
-    [SerializeField] private Button rightSelectButton;
+    [Header("右")]
+    [SerializeField] private TMP_Text rightName;
+    [SerializeField] private Image rightImage;
+    [SerializeField] private Button rightStatusBtn;
+    [SerializeField] private Button rightSelectBtn;
 
-    [Header("通常の選択画面をまとめた親")]
-    [SerializeField] private GameObject selectedUIRoot;
-
-    [Header("賭け金設定UIをまとめた親")]
-    [SerializeField] private GameObject betAmountRoot;
-
-    [Header("左の詳細ステータス画面")]
+    [Header("ステータス")]
     [SerializeField] private BetStatusDetailView leftStatusView;
-
-    [Header("右の詳細ステータス画面")]
     [SerializeField] private BetStatusDetailView rightStatusView;
 
-    [Header("賭け金UI")]
+    [Header("Root")]
+    [SerializeField] private GameObject selectRoot;
+    [SerializeField] private GameObject betRoot;
+
+    [Header("フェード")]
+    [SerializeField] private CanvasGroup fadePanel;
+
+    [Header("賭け金")]
     [SerializeField] private TMP_Text betAmountText;
-    [SerializeField] private Button upButton;
-    [SerializeField] private Button downButton;
 
-    // 現在どちらを選んだか
     private PredictionSide selectedSide;
+    private bool isTransitioning = false;
 
-    // まだ未選択かどうか
-    private bool hasSelectedSide = false;
+    // =========================
+    // 賭け金設定
+    // =========================
 
-    // 現在の賭け金
     private int currentBetAmount = 10;
-
-    // 最小 / 増減量
     private const int MIN_BET = 10;
     private const int BET_STEP = 1;
 
-    /// <summary>
-    /// シーン開始時に呼ばれる
-    /// </summary>
+    // =========================
+    // 長押し制御🔥
+    // =========================
+    private bool isPressing = false;
+    private bool isIncrease = true;
+    private CancellationTokenSource cts;
+
+    // =========================
+    // 初期化
+    // =========================
     private void Start()
     {
         if (GameSession.Instance == null)
@@ -71,186 +77,148 @@ public class BetSceneController : MonoBehaviour
             return;
         }
 
-        RefreshCoinText();
-        SetupMonsterViews();
-
-        if (leftStatusView != null)
-        {
-            leftStatusView.Clear();
-            leftStatusView.Close();
-        }
-
-        if (rightStatusView != null)
-        {
-            rightStatusView.Clear();
-            rightStatusView.Close();
-        }
-
-        OpenSelectedUI();
-        OpenBetAmountUI();
-
-        hasSelectedSide = false;
-        UpdateSelectButtonColors();
-
-        currentBetAmount = Mathf.Min(MIN_BET, GetMaxBetAmount());
-        if (currentBetAmount < MIN_BET)
-        {
-            currentBetAmount = MIN_BET;
-        }
-
+        Setup();
+        ChangeState(UIState.Select);
         RefreshBetAmountText();
+
+        PlayIntro().Forget();
     }
 
-    /// <summary>
-    /// 通常選択UIを開く
-    /// </summary>
-    public void OpenSelectedUI()
+    private void Setup()
     {
-        if (selectedUIRoot != null)
-        {
-            selectedUIRoot.SetActive(true);
-            return;
-        }
+        coinText.text = $"Coin: {GameSession.Instance.CurrentCoin}";
 
-        leftCharaNameText.enabled = true;
-        leftCharaImage.enabled = true;
-        leftStatusButton.gameObject.SetActive(true);
-        leftSelectButton.gameObject.SetActive(true);
+        var left = GameSession.Instance.LeftMonster;
+        var right = GameSession.Instance.RightMonster;
 
-        rightCharaNameText.enabled = true;
-        rightCharaImage.enabled = true;
-        rightStatusButton.gameObject.SetActive(true);
-        rightSelectButton.gameObject.SetActive(true);
+        leftName.text = left.Name;
+        leftImage.sprite = left.Icon;
+
+        rightName.text = right.Name;
+        rightImage.sprite = right.Icon;
     }
 
-    /// <summary>
-    /// 通常選択UIを閉じる
-    /// </summary>
-    public void CloseSelectedUI()
+    private void ChangeState(UIState state)
     {
-        if (selectedUIRoot != null)
+        currentState = state;
+
+        if (state == UIState.Select)
         {
-            selectedUIRoot.SetActive(false);
-            return;
+            selectRoot.SetActive(true);
+            betRoot.SetActive(true);
+
+            leftStatusView?.Close();
+            rightStatusView?.Close();
         }
-
-        leftCharaNameText.enabled = false;
-        leftCharaImage.enabled = false;
-        leftStatusButton.gameObject.SetActive(false);
-        leftSelectButton.gameObject.SetActive(false);
-
-        rightCharaNameText.enabled = false;
-        rightCharaImage.enabled = false;
-        rightStatusButton.gameObject.SetActive(false);
-        rightSelectButton.gameObject.SetActive(false);
+        else
+        {
+            selectRoot.SetActive(false);
+            betRoot.SetActive(false);
+        }
     }
 
-    /// <summary>
-    /// 賭け金設定UIを表示する
-    /// </summary>
-    private void OpenBetAmountUI()
+    // =========================
+    // UI演出
+    // =========================
+    private async UniTask PlayIntro()
     {
-        if (betAmountRoot != null)
-        {
-            betAmountRoot.SetActive(true);
-            return;
-        }
+        coinText.alpha = 0f;
+        await coinText.DOFade(1f, 0.5f).AsyncWaitForCompletion();
 
-        if (betAmountText != null) betAmountText.gameObject.SetActive(true);
-        if (upButton != null) upButton.gameObject.SetActive(true);
-        if (downButton != null) downButton.gameObject.SetActive(true);
+        var l = leftImage.rectTransform;
+        var r = rightImage.rectTransform;
+
+        float lx = l.anchoredPosition.x;
+        float rx = r.anchoredPosition.x;
+
+        l.anchoredPosition = new Vector2(-800, l.anchoredPosition.y);
+        r.anchoredPosition = new Vector2(800, r.anchoredPosition.y);
+
+        await UniTask.WhenAll(
+            l.DOAnchorPosX(lx, 0.5f).SetEase(Ease.OutBack).AsyncWaitForCompletion().AsUniTask(),
+            r.DOAnchorPosX(rx, 0.5f).SetEase(Ease.OutBack).AsyncWaitForCompletion().AsUniTask()
+        );
     }
 
-    /// <summary>
-    /// 賭け金設定UIを非表示にする
-    /// </summary>
-    private void CloseBetAmountUI()
-    {
-        if (betAmountRoot != null)
-        {
-            betAmountRoot.SetActive(false);
-            return;
-        }
-
-        if (betAmountText != null) betAmountText.gameObject.SetActive(false);
-        if (upButton != null) upButton.gameObject.SetActive(false);
-        if (downButton != null) downButton.gameObject.SetActive(false);
-    }
-
-    /// <summary>
-    /// 左の詳細ステータスを表示する
-    /// </summary>
+    // =========================
+    // ステータス表示
+    // =========================
     public void OnClickLeftStatus()
     {
-        if (leftStatusView == null) return;
+        ChangeState(UIState.Status);
 
-        CloseSelectedUI();
-        CloseBetAmountUI();
-
-        if (rightStatusView != null)
-        {
-            rightStatusView.Close();
-        }
-
-        // 左に賭けた場合のオッズを計算する
-        float leftOdds = BetOddsCalculator.CalculatePayoutMultiplier(
+        float odds = BetOddsCalculator.CalculatePayoutMultiplier(
             GameSession.Instance.LeftMonster,
             GameSession.Instance.RightMonster,
             PredictionSide.Left
         );
 
-        leftStatusView.Open();
-        leftStatusView.Show(GameSession.Instance.LeftMonster, leftOdds);
+        leftStatusView.PlayOpenAnimation(GameSession.Instance.LeftMonster, GameSession.Instance.RightMonster, odds).Forget();
     }
 
-    /// <summary>
-    /// 右の詳細ステータスを表示する
-    /// </summary>
     public void OnClickRightStatus()
     {
-        if (rightStatusView == null) return;
+        ChangeState(UIState.Status);
 
-        CloseSelectedUI();
-        CloseBetAmountUI();
-
-        if (leftStatusView != null)
-        {
-            leftStatusView.Close();
-        }
-
-        // 右に賭けた場合のオッズを計算する
-        float rightOdds = BetOddsCalculator.CalculatePayoutMultiplier(
+        float odds = BetOddsCalculator.CalculatePayoutMultiplier(
             GameSession.Instance.LeftMonster,
             GameSession.Instance.RightMonster,
             PredictionSide.Right
         );
 
-        rightStatusView.Open();
-        rightStatusView.Show(GameSession.Instance.RightMonster, rightOdds);
+        rightStatusView.PlayOpenAnimation(GameSession.Instance.LeftMonster, GameSession.Instance.RightMonster, odds).Forget();
     }
 
-    /// <summary>
-    /// 詳細画面から通常画面へ戻る
-    /// </summary>
     public void OnClickBackMenu()
     {
-        if (leftStatusView != null)
-        {
-            leftStatusView.Close();
-        }
-
-        if (rightStatusView != null)
-        {
-            rightStatusView.Close();
-        }
-
-        OpenSelectedUI();
-        OpenBetAmountUI();
+        ChangeState(UIState.Select);
     }
 
-    /// <summary>
-    /// 賭け金を増やす
-    /// </summary>
+    // =========================
+    // バトル遷移
+    // =========================
+    public void OnClickLeftSelect()
+    {
+        selectedSide = PredictionSide.Left;
+        SaveBet();
+        GoBattle().Forget();
+    }
+
+    public void OnClickRightSelect()
+    {
+        selectedSide = PredictionSide.Right;
+        SaveBet();
+        GoBattle().Forget();
+    }
+
+    private async UniTask GoBattle()
+    {
+        if (isTransitioning) return;
+        isTransitioning = true;
+
+        await fadePanel.DOFade(1f, 0.5f).AsyncWaitForCompletion();
+        SceneManager.LoadScene(SceneNames.Battle);
+    }
+
+    private void SaveBet()
+    {
+        float multi = BetOddsCalculator.CalculatePayoutMultiplier(
+            GameSession.Instance.LeftMonster,
+            GameSession.Instance.RightMonster,
+            selectedSide
+        );
+
+        GameSession.Instance.SetBet(new BetData
+        {
+            Side = selectedSide,
+            Amount = currentBetAmount, // ★修正：賭け金反映
+            PayoutMultiplier = multi
+        });
+    }
+
+    // =========================
+    // 賭け金操作
+    // =========================
     public void OnClickBetUp()
     {
         int maxBet = GetMaxBetAmount();
@@ -264,9 +232,6 @@ public class BetSceneController : MonoBehaviour
         RefreshBetAmountText();
     }
 
-    /// <summary>
-    /// 賭け金を減らす
-    /// </summary>
     public void OnClickBetDown()
     {
         currentBetAmount -= BET_STEP;
@@ -278,45 +243,6 @@ public class BetSceneController : MonoBehaviour
         RefreshBetAmountText();
     }
 
-    /// <summary>
-    /// 左に賭ける
-    /// </summary>
-    public void OnClickLeftSelect()
-    {
-        selectedSide = PredictionSide.Left;
-        hasSelectedSide = true;
-
-        UpdateSelectButtonColors();
-        SaveBetData();
-
-        SceneManager.LoadScene(SceneNames.Battle);
-    }
-
-    /// <summary>
-    /// 右に賭ける
-    /// </summary>
-    public void OnClickRightSelect()
-    {
-        selectedSide = PredictionSide.Right;
-        hasSelectedSide = true;
-
-        UpdateSelectButtonColors();
-        SaveBetData();
-
-        SceneManager.LoadScene(SceneNames.Battle);
-    }
-
-    /// <summary>
-    /// コイン表示更新
-    /// </summary>
-    private void RefreshCoinText()
-    {
-        coinText.text = $"Coin: {GameSession.Instance.CurrentCoin}";
-    }
-
-    /// <summary>
-    /// 賭け金表示更新
-    /// </summary>
     private void RefreshBetAmountText()
     {
         if (betAmountText != null)
@@ -325,9 +251,6 @@ public class BetSceneController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 最大賭け金を返す
-    /// </summary>
     private int GetMaxBetAmount()
     {
         int coin = GameSession.Instance.CurrentCoin;
@@ -340,82 +263,76 @@ public class BetSceneController : MonoBehaviour
         return (coin / BET_STEP) * BET_STEP;
     }
 
+    // =========================
+    // 長押し処理🔥
+    // =========================
+
     /// <summary>
-    /// 左右モンスターの名前と画像を表示
+    /// ＋ボタン押した
     /// </summary>
-    private void SetupMonsterViews()
+    public void StartIncrease()
     {
-        MonsterData leftMonster = GameSession.Instance.LeftMonster;
-        MonsterData rightMonster = GameSession.Instance.RightMonster;
-
-        leftCharaNameText.text = leftMonster.Name;
-        if (leftCharaImage != null)
-        {
-            leftCharaImage.sprite = leftMonster.Icon;
-        }
-
-        rightCharaNameText.text = rightMonster.Name;
-        if (rightCharaImage != null)
-        {
-            rightCharaImage.sprite = rightMonster.Icon;
-        }
+        isIncrease = true;
+        StartLongPress();
     }
 
     /// <summary>
-    /// Selectボタンの色更新
+    /// −ボタン押した
     /// </summary>
-    private void UpdateSelectButtonColors()
+    public void StartDecrease()
     {
-        if (leftSelectButton == null || rightSelectButton == null) return;
+        isIncrease = false;
+        StartLongPress();
+    }
 
-        Color normalColor = Color.white;
-        Color selectedColor = new Color(1f, 0.9f, 0.4f);
+    private void StartLongPress()
+    {
+        isPressing = true;
 
-        Image leftButtonImage = leftSelectButton.GetComponent<Image>();
-        Image rightButtonImage = rightSelectButton.GetComponent<Image>();
+        cts?.Cancel();
+        cts = new CancellationTokenSource();
 
-        if (leftButtonImage == null || rightButtonImage == null) return;
+        HandleLongPress(cts.Token).Forget();
+    }
 
-        if (!hasSelectedSide)
+    /// <summary>
+    /// ボタン離した
+    /// </summary>
+    public void StopLongPress()
+    {
+        isPressing = false;
+        cts?.Cancel();
+    }
+
+    private async UniTaskVoid HandleLongPress(CancellationToken token)
+    {
+        // 最初の1回
+        Execute();
+
+        await UniTask.Delay(300, cancellationToken: token);
+
+        float interval = 0.2f;
+
+        while (isPressing && !token.IsCancellationRequested)
         {
-            leftButtonImage.color = normalColor;
-            rightButtonImage.color = normalColor;
-            return;
+            Execute();
+
+            // 加速🔥
+            interval = Mathf.Max(0.05f, interval - 0.02f);
+
+            await UniTask.Delay((int)(interval * 1000), cancellationToken: token);
         }
+    }
 
-        if (selectedSide == PredictionSide.Left)
+    private void Execute()
+    {
+        if (isIncrease)
         {
-            leftButtonImage.color = selectedColor;
-            rightButtonImage.color = normalColor;
+            OnClickBetUp();
         }
         else
         {
-            leftButtonImage.color = normalColor;
-            rightButtonImage.color = selectedColor;
+            OnClickBetDown();
         }
-    }
-
-    /// <summary>
-    /// 賭け情報を保存
-    /// </summary>
-    private void SaveBetData()
-    {
-        if (!hasSelectedSide) return;
-
-        float payoutMultiplier = BetOddsCalculator.CalculatePayoutMultiplier(
-            GameSession.Instance.LeftMonster,
-            GameSession.Instance.RightMonster,
-            selectedSide
-        );
-
-        BetData betData = new BetData
-        {
-            Side = selectedSide,
-            Amount = currentBetAmount,
-            InspectLevel = InspectLevel.Full,
-            PayoutMultiplier = payoutMultiplier
-        };
-
-        GameSession.Instance.SetBet(betData);
     }
 }

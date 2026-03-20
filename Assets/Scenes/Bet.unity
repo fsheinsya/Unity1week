@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 13308347}
   - component: {fileID: 13308351}
   - component: {fileID: 13308350}
+  - component: {fileID: 13308352}
   m_Layer: 5
   m_Name: up
   m_TagString: Untagged
@@ -202,19 +203,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 13308348}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1893551052}
-        m_TargetAssemblyTypeName: BetSceneController, Assembly-CSharp
-        m_MethodName: OnClickBetUp
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &13308348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,6 +282,67 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &13308352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13308345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventTrigger
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1893551052}
+          m_TargetAssemblyTypeName: BetSceneController, Assembly-CSharp
+          m_MethodName: StartIncrease
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1893551052}
+          m_TargetAssemblyTypeName: BetSceneController, Assembly-CSharp
+          m_MethodName: StopLongPress
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1893551052}
+          m_TargetAssemblyTypeName: BetSceneController, Assembly-CSharp
+          m_MethodName: StopLongPress
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &68278342
 GameObject:
   m_ObjectHideFlags: 0
@@ -811,7 +861,7 @@ RectTransform:
   - {fileID: 1464924341}
   - {fileID: 1519420670}
   - {fileID: 253930446}
-  m_Father: {fileID: 1939490389}
+  m_Father: {fileID: 445925361}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2208,7 +2258,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BetStatusDetailView
   rootObject: {fileID: 406097424}
-  charaImage: {fileID: 1655853597}
+  leftcharaImage: {fileID: 1928860996}
+  rightcharaImage: {fileID: 1949850545}
   hpText: {fileID: 520869904}
   defenseText: {fileID: 151095031}
   attackText: {fileID: 775292094}
@@ -2221,6 +2272,12 @@ MonoBehaviour:
   personalityText: {fileID: 1090951022}
   skillText1: {fileID: 1654554483}
   skillText2: {fileID: 353506568}
+  statusPanel: {fileID: 771236612}
+  elementPanel: {fileID: 1550094396}
+  oddsPanel: {fileID: 641228351}
+  personalityPanel: {fileID: 1591872746}
+  skillPanel1: {fileID: 1916547539}
+  skillPanel2: {fileID: 954073657}
 --- !u!223 &406097427
 Canvas:
   m_ObjectHideFlags: 0
@@ -2381,6 +2438,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 414645566}
   m_CullTransparentMesh: 1
+--- !u!1 &445925360
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 445925361}
+  m_Layer: 5
+  m_Name: SelectUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &445925361
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445925360}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 524698987}
+  - {fileID: 117319181}
+  m_Father: {fileID: 1939490389}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &458802763
 GameObject:
   m_ObjectHideFlags: 0
@@ -2612,7 +2706,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BetStatusDetailView
   rootObject: {fileID: 494748103}
-  charaImage: {fileID: 335299499}
+  leftcharaImage: {fileID: 1928860996}
+  rightcharaImage: {fileID: 1949850545}
   hpText: {fileID: 752991502}
   defenseText: {fileID: 1939217086}
   attackText: {fileID: 74277100}
@@ -2625,6 +2720,12 @@ MonoBehaviour:
   personalityText: {fileID: 1013308943}
   skillText1: {fileID: 580832816}
   skillText2: {fileID: 1881784814}
+  statusPanel: {fileID: 277906810}
+  elementPanel: {fileID: 314609618}
+  oddsPanel: {fileID: 1175058119}
+  personalityPanel: {fileID: 179425236}
+  skillPanel1: {fileID: 1093773926}
+  skillPanel2: {fileID: 1975590156}
 --- !u!1 &501482653
 GameObject:
   m_ObjectHideFlags: 0
@@ -2931,7 +3032,7 @@ RectTransform:
   - {fileID: 1710253872}
   - {fileID: 1444140098}
   - {fileID: 339001457}
-  m_Father: {fileID: 1939490389}
+  m_Father: {fileID: 445925361}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4981,6 +5082,9 @@ GameObject:
   - component: {fileID: 1021091105}
   - component: {fileID: 1021091104}
   - component: {fileID: 1021091103}
+  - component: {fileID: 1021091108}
+  - component: {fileID: 1021091107}
+  - component: {fileID: 1021091106}
   m_Layer: 5
   m_Name: down
   m_TagString: Untagged
@@ -5050,19 +5154,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1021091104}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1893551052}
-        m_TargetAssemblyTypeName: BetSceneController, Assembly-CSharp
-        m_MethodName: OnClickBetDown
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1021091104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5101,6 +5193,107 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1021091101}
   m_CullTransparentMesh: 1
+--- !u!114 &1021091106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021091101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.EventTrigger
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1893551052}
+          m_TargetAssemblyTypeName: BetSceneController, Assembly-CSharp
+          m_MethodName: StartDecrease
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1893551052}
+          m_TargetAssemblyTypeName: BetSceneController, Assembly-CSharp
+          m_MethodName: StopLongPress
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1893551052}
+          m_TargetAssemblyTypeName: BetSceneController, Assembly-CSharp
+          m_MethodName: StopLongPress
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1021091107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021091101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!223 &1021091108
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1021091101}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &1063305382
 GameObject:
   m_ObjectHideFlags: 0
@@ -6725,7 +6918,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -350, y: 350}
+  m_AnchoredPosition: {x: 0, y: 350}
   m_SizeDelta: {x: 300, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1483938979
@@ -6782,8 +6975,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
@@ -7669,7 +7862,7 @@ RectTransform:
   m_GameObject: {fileID: 1655853595}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: -2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 117319181}
@@ -8872,21 +9065,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BetSceneController
   coinText: {fileID: 1483938979}
-  leftCharaNameText: {fileID: 339001458}
-  leftCharaImage: {fileID: 335299499}
-  leftStatusButton: {fileID: 1710253873}
-  leftSelectButton: {fileID: 1444140099}
-  rightCharaNameText: {fileID: 253930447}
-  rightCharaImage: {fileID: 1655853597}
-  rightStatusButton: {fileID: 1464924344}
-  rightSelectButton: {fileID: 1519420673}
-  selectedUIRoot: {fileID: 0}
-  betAmountRoot: {fileID: 1265258355}
+  leftName: {fileID: 339001458}
+  leftImage: {fileID: 335299499}
+  leftStatusBtn: {fileID: 1710253873}
+  leftSelectBtn: {fileID: 1444140099}
+  rightName: {fileID: 253930447}
+  rightImage: {fileID: 1655853597}
+  rightStatusBtn: {fileID: 1464924344}
+  rightSelectBtn: {fileID: 1519420673}
   leftStatusView: {fileID: 494748106}
   rightStatusView: {fileID: 406097426}
+  selectRoot: {fileID: 445925360}
+  betRoot: {fileID: 1265258355}
+  fadePanel: {fileID: 0}
   betAmountText: {fileID: 1643322385}
-  upButton: {fileID: 13308347}
-  downButton: {fileID: 1021091103}
 --- !u!1 &1916547538
 GameObject:
   m_ObjectHideFlags: 0
@@ -9304,9 +9496,8 @@ RectTransform:
   - {fileID: 494748104}
   - {fileID: 406097425}
   - {fileID: 1483938978}
-  - {fileID: 524698987}
-  - {fileID: 117319181}
   - {fileID: 1265258356}
+  - {fileID: 445925361}
   m_Father: {fileID: 216257640}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -9326,7 +9517,7 @@ GameObject:
   - component: {fileID: 1949850546}
   - component: {fileID: 1949850545}
   m_Layer: 5
-  m_Name: CharaImage
+  m_Name: CharaImage2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

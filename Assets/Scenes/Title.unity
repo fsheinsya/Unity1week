@@ -375,6 +375,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe27a040728b1374ba0a84c053e11d27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleSceneController
+  title: {fileID: 330330870}
+  click: {fileID: 2072381969}
 --- !u!1 &1634398324
 GameObject:
   m_ObjectHideFlags: 0
@@ -861,6 +863,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0f4a1ef1b922214598804571758051e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameSession
+  slimeSprites:
+  - {fileID: 505718817217138860, guid: 091c0fbe40354b64a98fcfdb66faeadb, type: 3}
+  - {fileID: -7802691104615874314, guid: 6ae59ec485096fd47a5dab54f8dbe9ed, type: 3}
+  - {fileID: 4345143378608082979, guid: d13a8621db885324f80caf5e6be329da, type: 3}
+  - {fileID: -3211810621207689254, guid: 5b0cef42b14f0ea40983cbc92069adb3, type: 3}
+  - {fileID: 5288837014847744195, guid: 308f677aa5b6fc346813fedcb1963727, type: 3}
+  - {fileID: 838662039281341075, guid: 20e7df3adf5364042ba844e5314521c5, type: 3}
+  - {fileID: 1917602699756366753, guid: 0beffdcd36a8cc34fbc3ed75977fc891, type: 3}
+  - {fileID: -923606836, guid: b980c4c68ac29ae46ac1edcdfefd27cf, type: 3}
+  - {fileID: -1530893602457906192, guid: 107724fa11b66fb46940f47d7bab4038, type: 3}
+  - {fileID: -4168233794015218660, guid: 773b1e669e818a249b3a9f4801eae8ad, type: 3}
 --- !u!4 &2134415603
 Transform:
   m_ObjectHideFlags: 0
