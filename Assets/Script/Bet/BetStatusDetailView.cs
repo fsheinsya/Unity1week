@@ -1,4 +1,3 @@
-using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +6,8 @@ using UnityEngine.UI;
 /// Betシーンの詳細ステータス画面を表示するクラス
 /// ・キャラ画像
 /// ・基本能力値
+/// ・属性
+/// ・オッズ
 /// ・性格
 /// ・スキル一覧
 /// を表示する
@@ -28,7 +29,9 @@ public class BetStatusDetailView : MonoBehaviour
     [SerializeField] private TMP_Text accuracyText;
     [SerializeField] private TMP_Text evasionText;
 
-    [Header("性格表示")]
+    [Header("追加情報表示")]
+    [SerializeField] private TMP_Text elementText;
+    [SerializeField] private TMP_Text oddsText;
     [SerializeField] private TMP_Text personalityText;
 
     [Header("スキル表示")]
@@ -77,6 +80,8 @@ public class BetStatusDetailView : MonoBehaviour
         if (speedText != null) speedText.text = "素早さ:----";
         if (accuracyText != null) accuracyText.text = "命中率:----";
         if (evasionText != null) evasionText.text = "回避率:----";
+        if (elementText != null) elementText.text = "属性：無";
+        if (oddsText != null) oddsText.text = "オッズ: 0.0";
         if (personalityText != null) personalityText.text = "なし";
         if (skillText1 != null) skillText1.text = "スキル";
         if (skillText2 != null) skillText2.text = "スキル";
@@ -85,7 +90,9 @@ public class BetStatusDetailView : MonoBehaviour
     /// <summary>
     /// 指定したモンスターの詳細情報を表示する
     /// </summary>
-    public void Show(MonsterData data)
+    /// <param name="data">表示したいモンスター</param>
+    /// <param name="odds">このモンスターに賭けた時のオッズ倍率</param>
+    public void Show(MonsterData data, float odds)
     {
         // キャラ画像
         if (charaImage != null)
@@ -101,6 +108,18 @@ public class BetStatusDetailView : MonoBehaviour
         if (speedText != null) speedText.text = $"素早さ:{data.Stats.Speed}";
         if (accuracyText != null) accuracyText.text = $"命中率:{data.Stats.Accuracy}";
         if (evasionText != null) evasionText.text = $"回避率:{data.Stats.Evasion}";
+
+        // 属性
+        if (elementText != null)
+        {
+            elementText.text = $"{GetElementName(data.Element)}";
+        }
+
+        // オッズ
+        if (oddsText != null)
+        {
+            oddsText.text = $"{odds:F1}";
+        }
 
         // 性格
         if (personalityText != null)
@@ -129,6 +148,24 @@ public class BetStatusDetailView : MonoBehaviour
         if (index < 0 || index >= data.Skills.Count) return "スキルなし";
 
         return data.Skills[index].SkillName;
+    }
+
+    /// <summary>
+    /// 属性の日本語名を返す
+    /// </summary>
+    private string GetElementName(ElementType element)
+    {
+        switch (element)
+        {
+            case ElementType.Fire: return "炎";
+            case ElementType.Water: return "水";
+            case ElementType.Grass: return "草";
+            case ElementType.Thunder: return "雷";
+            case ElementType.Rock: return "岩";
+            case ElementType.Dark: return "闇";
+            case ElementType.Light: return "光";
+            default: return "無";
+        }
     }
 
     /// <summary>

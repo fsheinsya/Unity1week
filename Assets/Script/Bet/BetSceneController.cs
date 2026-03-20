@@ -33,6 +33,9 @@ public class BetSceneController : MonoBehaviour
     [Header("通常の選択画面をまとめた親")]
     [SerializeField] private GameObject selectedUIRoot;
 
+    [Header("賭け金設定UIをまとめた親")]
+    [SerializeField] private GameObject betAmountRoot;
+
     [Header("左の詳細ステータス画面")]
     [SerializeField] private BetStatusDetailView leftStatusView;
 
@@ -53,7 +56,7 @@ public class BetSceneController : MonoBehaviour
     // 現在の賭け金
     private int currentBetAmount = 10;
 
-    // 最小 / 最大 / 増減量
+    // 最小 / 増減量
     private const int MIN_BET = 10;
     private const int BET_STEP = 1;
 
@@ -84,13 +87,13 @@ public class BetSceneController : MonoBehaviour
         }
 
         OpenSelectedUI();
+        OpenBetAmountUI();
 
         hasSelectedSide = false;
         UpdateSelectButtonColors();
 
-        // 初期賭け金を設定
-        currentBetAmount = Mathf.Min(MIN_BET, GameSession.Instance.CurrentCoin);
-        if (currentBetAmount <= 0)
+        currentBetAmount = Mathf.Min(MIN_BET, GetMaxBetAmount());
+        if (currentBetAmount < MIN_BET)
         {
             currentBetAmount = MIN_BET;
         }
@@ -143,6 +146,38 @@ public class BetSceneController : MonoBehaviour
     }
 
     /// <summary>
+    /// 賭け金設定UIを表示する
+    /// </summary>
+    private void OpenBetAmountUI()
+    {
+        if (betAmountRoot != null)
+        {
+            betAmountRoot.SetActive(true);
+            return;
+        }
+
+        if (betAmountText != null) betAmountText.gameObject.SetActive(true);
+        if (upButton != null) upButton.gameObject.SetActive(true);
+        if (downButton != null) downButton.gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// 賭け金設定UIを非表示にする
+    /// </summary>
+    private void CloseBetAmountUI()
+    {
+        if (betAmountRoot != null)
+        {
+            betAmountRoot.SetActive(false);
+            return;
+        }
+
+        if (betAmountText != null) betAmountText.gameObject.SetActive(false);
+        if (upButton != null) upButton.gameObject.SetActive(false);
+        if (downButton != null) downButton.gameObject.SetActive(false);
+    }
+
+    /// <summary>
     /// 左の詳細ステータスを表示する
     /// </summary>
     public void OnClickLeftStatus()
@@ -150,14 +185,22 @@ public class BetSceneController : MonoBehaviour
         if (leftStatusView == null) return;
 
         CloseSelectedUI();
+        CloseBetAmountUI();
 
         if (rightStatusView != null)
         {
             rightStatusView.Close();
         }
 
+        // 左に賭けた場合のオッズを計算する
+        float leftOdds = BetOddsCalculator.CalculatePayoutMultiplier(
+            GameSession.Instance.LeftMonster,
+            GameSession.Instance.RightMonster,
+            PredictionSide.Left
+        );
+
         leftStatusView.Open();
-        leftStatusView.Show(GameSession.Instance.LeftMonster);
+        leftStatusView.Show(GameSession.Instance.LeftMonster, leftOdds);
     }
 
     /// <summary>
@@ -168,14 +211,22 @@ public class BetSceneController : MonoBehaviour
         if (rightStatusView == null) return;
 
         CloseSelectedUI();
+        CloseBetAmountUI();
 
         if (leftStatusView != null)
         {
             leftStatusView.Close();
         }
 
+        // 右に賭けた場合のオッズを計算する
+        float rightOdds = BetOddsCalculator.CalculatePayoutMultiplier(
+            GameSession.Instance.LeftMonster,
+            GameSession.Instance.RightMonster,
+            PredictionSide.Right
+        );
+
         rightStatusView.Open();
-        rightStatusView.Show(GameSession.Instance.RightMonster);
+        rightStatusView.Show(GameSession.Instance.RightMonster, rightOdds);
     }
 
     /// <summary>
@@ -194,6 +245,7 @@ public class BetSceneController : MonoBehaviour
         }
 
         OpenSelectedUI();
+        OpenBetAmountUI();
     }
 
     /// <summary>
@@ -274,11 +326,10 @@ public class BetSceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// 今回賭けられる最大額を返す
+    /// 最大賭け金を返す
     /// </summary>
     private int GetMaxBetAmount()
     {
-        // 所持コイン以下、かつ10刻みで扱いやすくする
         int coin = GameSession.Instance.CurrentCoin;
 
         if (coin < MIN_BET)
@@ -290,7 +341,7 @@ public class BetSceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// 左右モンスターの名前と画像を表示する
+    /// 左右モンスターの名前と画像を表示
     /// </summary>
     private void SetupMonsterViews()
     {
@@ -311,7 +362,7 @@ public class BetSceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// Selectボタンの色を更新する
+    /// Selectボタンの色更新
     /// </summary>
     private void UpdateSelectButtonColors()
     {
@@ -345,13 +396,12 @@ public class BetSceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// 賭け情報を保存する
+    /// 賭け情報を保存
     /// </summary>
     private void SaveBetData()
     {
         if (!hasSelectedSide) return;
 
-        // 左右の強さから倍率を決定する
         float payoutMultiplier = BetOddsCalculator.CalculatePayoutMultiplier(
             GameSession.Instance.LeftMonster,
             GameSession.Instance.RightMonster,
