@@ -838,6 +838,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 117319181}
+  - component: {fileID: 117319182}
   m_Layer: 5
   m_Name: CharaUI2
   m_TagString: Untagged
@@ -868,6 +869,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -100}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &117319182
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117319180}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &151095029
 GameObject:
   m_ObjectHideFlags: 0
@@ -2210,7 +2223,8 @@ GameObject:
   m_Component:
   - component: {fileID: 406097425}
   - component: {fileID: 406097427}
-  - component: {fileID: 406097426}
+  - component: {fileID: 406097429}
+  - component: {fileID: 406097428}
   m_Layer: 5
   m_Name: StatusUI2
   m_TagString: Untagged
@@ -2245,39 +2259,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -100.00001}
   m_SizeDelta: {x: 1600, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &406097426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 406097424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b08d55e236415744b9dd60e319e8798e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BetStatusDetailView
-  rootObject: {fileID: 406097424}
-  leftcharaImage: {fileID: 1928860996}
-  rightcharaImage: {fileID: 1949850545}
-  hpText: {fileID: 520869904}
-  defenseText: {fileID: 151095031}
-  attackText: {fileID: 775292094}
-  growthText: {fileID: 2127184659}
-  speedText: {fileID: 302023578}
-  accuracyText: {fileID: 1705531162}
-  evasionText: {fileID: 864842754}
-  elementText: {fileID: 1705165217}
-  oddsText: {fileID: 792267795}
-  personalityText: {fileID: 1090951022}
-  skillText1: {fileID: 1654554483}
-  skillText2: {fileID: 353506568}
-  statusPanel: {fileID: 771236612}
-  elementPanel: {fileID: 1550094396}
-  oddsPanel: {fileID: 641228351}
-  personalityPanel: {fileID: 1591872746}
-  skillPanel1: {fileID: 1916547539}
-  skillPanel2: {fileID: 954073657}
 --- !u!223 &406097427
 Canvas:
   m_ObjectHideFlags: 0
@@ -2301,6 +2282,70 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &406097428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406097424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43660bafb31328d4fb2b3c158cd5738b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RightStatusDetailView
+  rootObject: {fileID: 0}
+  charaImage: {fileID: 0}
+  hpText: {fileID: 0}
+  atkText: {fileID: 0}
+  defText: {fileID: 0}
+  growthText: {fileID: 0}
+  speedText: {fileID: 0}
+  accuracyText: {fileID: 0}
+  evasionText: {fileID: 0}
+  elementText: {fileID: 0}
+  personalityText: {fileID: 0}
+  oddsText: {fileID: 0}
+  skillText1: {fileID: 0}
+  skillText2: {fileID: 0}
+  statusPanel: {fileID: 0}
+  elementPanel: {fileID: 0}
+  oddsPanel: {fileID: 0}
+  personalityPanel: {fileID: 0}
+  skillPanel1: {fileID: 0}
+  skillPanel2: {fileID: 0}
+--- !u!114 &406097429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406097424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43660bafb31328d4fb2b3c158cd5738b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RightStatusDetailView
+  rootObject: {fileID: 406097424}
+  charaImage: {fileID: 1949850545}
+  hpText: {fileID: 520869904}
+  atkText: {fileID: 775292094}
+  defText: {fileID: 151095031}
+  growthText: {fileID: 2127184659}
+  speedText: {fileID: 302023578}
+  accuracyText: {fileID: 1705531162}
+  evasionText: {fileID: 864842754}
+  elementText: {fileID: 1705165217}
+  personalityText: {fileID: 1090951022}
+  oddsText: {fileID: 792267795}
+  skillText1: {fileID: 1654554483}
+  skillText2: {fileID: 353506568}
+  statusPanel: {fileID: 771236612}
+  elementPanel: {fileID: 1550094396}
+  oddsPanel: {fileID: 641228351}
+  personalityPanel: {fileID: 1591872746}
+  skillPanel1: {fileID: 1916547539}
+  skillPanel2: {fileID: 954073657}
 --- !u!1 &414645566
 GameObject:
   m_ObjectHideFlags: 0
@@ -2702,22 +2747,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 494748103}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b08d55e236415744b9dd60e319e8798e, type: 3}
+  m_Script: {fileID: 11500000, guid: 74f630bc233b77642a4f45230e4e9258, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BetStatusDetailView
+  m_EditorClassIdentifier: Assembly-CSharp::LeftStatusDetailView
   rootObject: {fileID: 494748103}
-  leftcharaImage: {fileID: 1928860996}
-  rightcharaImage: {fileID: 1949850545}
+  charaImage: {fileID: 1928860996}
   hpText: {fileID: 752991502}
-  defenseText: {fileID: 1939217086}
-  attackText: {fileID: 74277100}
+  atkText: {fileID: 74277100}
+  defText: {fileID: 1939217086}
   growthText: {fileID: 1326594730}
   speedText: {fileID: 1001082713}
   accuracyText: {fileID: 78934059}
   evasionText: {fileID: 414645568}
   elementText: {fileID: 732585392}
-  oddsText: {fileID: 1811871500}
   personalityText: {fileID: 1013308943}
+  oddsText: {fileID: 1811871500}
   skillText1: {fileID: 580832816}
   skillText2: {fileID: 1881784814}
   statusPanel: {fileID: 277906810}
@@ -3009,6 +3053,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 524698987}
+  - component: {fileID: 524698988}
   m_Layer: 5
   m_Name: CharaUI
   m_TagString: Untagged
@@ -3039,6 +3084,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -100}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &524698988
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524698986}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &536764509
 GameObject:
   m_ObjectHideFlags: 0
@@ -6895,6 +6952,7 @@ GameObject:
   - component: {fileID: 1483938978}
   - component: {fileID: 1483938980}
   - component: {fileID: 1483938979}
+  - component: {fileID: 1483938981}
   m_Layer: 5
   m_Name: Coin
   m_TagString: Untagged
@@ -7021,6 +7079,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1483938977}
   m_CullTransparentMesh: 1
+--- !u!225 &1483938981
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483938977}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1519420669
 GameObject:
   m_ObjectHideFlags: 0
@@ -9065,20 +9135,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BetSceneController
   coinText: {fileID: 1483938979}
-  leftName: {fileID: 339001458}
-  leftImage: {fileID: 335299499}
-  leftStatusBtn: {fileID: 1710253873}
-  leftSelectBtn: {fileID: 1444140099}
-  rightName: {fileID: 253930447}
-  rightImage: {fileID: 1655853597}
-  rightStatusBtn: {fileID: 1464924344}
-  rightSelectBtn: {fileID: 1519420673}
-  leftStatusView: {fileID: 494748106}
-  rightStatusView: {fileID: 406097426}
-  selectRoot: {fileID: 445925360}
-  betRoot: {fileID: 1265258355}
-  fadePanel: {fileID: 0}
+  coinCanvas: {fileID: 1483938981}
+  leftCharaNameText: {fileID: 339001458}
+  leftCharaImage: {fileID: 335299499}
+  leftCharaCanvas: {fileID: 524698988}
+  leftStatusButton: {fileID: 1710253873}
+  leftSelectButton: {fileID: 1444140099}
+  rightCharaNameText: {fileID: 253930447}
+  rightCharaImage: {fileID: 1655853597}
+  rightCharaCanvas: {fileID: 117319182}
+  rightStatusButton: {fileID: 1464924344}
+  rightSelectButton: {fileID: 1519420673}
+  selectedUIRoot: {fileID: 445925360}
+  betAmountRoot: {fileID: 1265258355}
   betAmountText: {fileID: 1643322385}
+  leftStatusView: {fileID: 494748106}
+  rightStatusView: {fileID: 406097429}
 --- !u!1 &1916547538
 GameObject:
   m_ObjectHideFlags: 0

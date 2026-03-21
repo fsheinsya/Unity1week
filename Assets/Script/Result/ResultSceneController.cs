@@ -2,6 +2,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using DG.Tweening;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// Resultシーン全体を管理するクラス
@@ -10,7 +12,8 @@ using UnityEngine.UI;
 /// ・勝者画像の表示
 /// ・現在コイン数の表示
 /// ・現在ラウンド数の表示
-/// ・画面クリックで次の試合 or 最終結果画面へ遷移
+/// ・勝敗演出
+/// ・クリックで次ラウンド or 最終結果へ遷移
 /// </summary>
 public class ResultSceneController : MonoBehaviour
 {
@@ -19,44 +22,42 @@ public class ResultSceneController : MonoBehaviour
     [SerializeField] private Image winnerImage;
     [SerializeField] private TMP_Text coinText;
     [SerializeField] private TMP_Text roundText;
+    [SerializeField] private TMP_Text boolingWinnerText;
 
     // 連打で複数回遷移しないようにするフラグ
     private bool isTransitioning = false;
 
     /// <summary>
     /// シーン開始時に呼ばれる
-    /// GameSession に保存された試合結果を画面に反映する
+    /// セッション情報と試合結果をチェックしてUIを反映する
     /// </summary>
     private void Start()
     {
-        // GameSession が無いならタイトルへ戻す
-        if (GameSession.Instance == null)
+        // GameSession または試合結果が無いなら Title に戻す
+        if (GameSession.Instance == null ||
+            GameSession.Instance.CurrentMatchResult == null)
         {
             SceneManager.LoadScene(SceneNames.Title);
             return;
         }
 
-        // 試合結果が無いならタイトルへ戻す
-        if (GameSession.Instance.CurrentMatchResult == null)
-        {
-            SceneManager.LoadScene(SceneNames.Title);
-            return;
-        }
-
-        // 画面表示を更新する
+        // 結果画面の基本表示をセット
         SetupResultView();
+
+        // 勝敗演出を開始
+        PlayResultAnimation().Forget();
     }
 
     /// <summary>
     /// 毎フレーム呼ばれる
-    /// クリック入力を検知して次へ進む
+    /// クリックで次へ進む
     /// </summary>
     private void Update()
     {
-        // すでに遷移中なら何もしない
+        // すでに遷移中なら無視
         if (isTransitioning) return;
 
-        // 左クリックまたは右クリックで次へ進む
+        // 左クリックまたは右クリックで次へ
         if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
         {
             GoNext();
@@ -64,20 +65,20 @@ public class ResultSceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// 勝者名、勝者画像、コイン、ラウンド数を表示する
+    /// 勝者名・勝者画像・コイン・ラウンド数を表示する
     /// </summary>
     private void SetupResultView()
     {
-        // 今回の試合結果を取得
         MatchResultData result = GameSession.Instance.CurrentMatchResult;
 
-        // 現在ラウンド表示
+        // ラウンド表示
         roundText.text = $"round {GameSession.Instance.CurrentRound} / {GameSession.Instance.MaxRound}";
 
-        // 現在コイン表示
+        // コイン表示
+        // ここでは現在のセッション値をそのまま表示する
         coinText.text = $"Coin\n{GameSession.Instance.CurrentCoin}";
 
-        // 勝者モンスターを取得
+        // 勝者モンスター取得
         MonsterData winnerMonster = GetWinnerMonster(result.WinnerSide);
 
         // 勝者名表示
@@ -87,6 +88,8 @@ public class ResultSceneController : MonoBehaviour
         if (winnerImage != null)
         {
             winnerImage.sprite = winnerMonster.Icon;
+            winnerImage.color = Color.white;
+            winnerImage.preserveAspect = true;
         }
     }
 
@@ -104,6 +107,179 @@ public class ResultSceneController : MonoBehaviour
     }
 
     /// <summary>
+    /// 勝敗に応じた結果演出を流す
+    /// </summary>
+    private async UniTask PlayResultAnimation()
+    {
+        MatchResultData result = GameSession.Instance.CurrentMatchResult;
+
+        // プレイヤーの予想が当たったかどうか
+        bool isWin = IsPlayerWin(result);
+
+        // ---------------------------
+        // 初期状態リセット
+        // ---------------------------
+        if (winnerImage != null)
+        {
+            winnerImage.color = new Color(1f, 1f, 1f, 0f);
+        }
+
+        if (winnerNameText != null)
+        {
+            winnerNameText.rectTransform.anchoredPosition = new Vector2(-700f, 0f);
+        }
+
+        if (boolingWinnerText != null)
+        {
+            boolingWinnerText.transform.localScale = Vector3.zero;
+        }
+
+        // ---------------------------
+        // ① キャラ画像フェードイン
+        // ---------------------------
+        if (winnerImage != null)
+        {
+            await winnerImage.DOFade(1f, 0.5f).AsyncWaitForCompletion();
+        }
+
+        // ---------------------------
+        // ② 名前スライドイン
+        // ---------------------------
+        if (winnerNameText != null)
+        {
+            await winnerNameText.rectTransform
+                .DOAnchorPosX(-250f, 0.5f)
+                .SetEase(Ease.OutBack)
+                .AsyncWaitForCompletion();
+        }
+
+        // ---------------------------
+        // ③ 勝敗テキスト演出
+        // ---------------------------
+        if (boolingWinnerText != null)
+        {
+            if (isWin)
+            {
+                boolingWinnerText.text = "予想成功！";
+
+                // 一度大きくしてから戻す
+                boolingWinnerText.transform.localScale = Vector3.zero;
+
+                await boolingWinnerText.transform
+                    .DOScale(1.5f, 0.3f)
+                    .SetEase(Ease.OutBack)
+                    .AsyncWaitForCompletion();
+
+                await boolingWinnerText.transform
+                    .DOScale(1f, 0.2f)
+                    .SetEase(Ease.InOutQuad)
+                    .AsyncWaitForCompletion();
+            }
+            else
+            {
+                boolingWinnerText.text = "予想失敗…";
+                boolingWinnerText.transform.localScale = Vector3.one * 0.5f;
+
+                await boolingWinnerText.transform
+                    .DOScale(1f, 0.8f)
+                    .SetEase(Ease.OutQuad)
+                    .AsyncWaitForCompletion();
+            }
+        }
+
+        // ---------------------------
+        // ④ コイン表示演出
+        // ---------------------------
+        await AnimateCoin(result, isWin);
+    }
+
+    /// <summary>
+    /// コイン表示だけを演出する
+    /// 実際のセッション値はここでは変更しない
+    /// </summary>
+    private async UniTask AnimateCoin(MatchResultData result, bool isWin)
+    {
+        // BattleScene 側で CurrentCoin が最終値になっている前提
+        int targetCoin = GameSession.Instance.CurrentCoin;
+
+        // 演出開始用の見た目上の初期値を計算する
+        int startCoin;
+
+        if (isWin)
+        {
+            // 的中していた場合は、現在値から報酬分を引いた値を開始値とする
+            startCoin = targetCoin - result.RewardCoin;
+        }
+        else
+        {
+            // 外していた場合は、賭け金を失った後の値が currentCoin のはずなので
+            // 見た目上は「賭ける前」から減ったように見せる
+            int lostAmount = 0;
+
+            if (GameSession.Instance.CurrentBet != null)
+            {
+                lostAmount = GameSession.Instance.CurrentBet.Amount;
+            }
+
+            startCoin = targetCoin + lostAmount;
+        }
+
+        // 不自然なマイナス防止
+        startCoin = Mathf.Max(0, startCoin);
+
+        // 一旦開始値を表示
+        coinText.text = $"Coin\n{startCoin}";
+
+        // 少しガチャガチャした演出
+        float shuffleDuration = 0.6f;
+        float timer = 0f;
+
+        while (timer < shuffleDuration)
+        {
+            timer += Time.deltaTime;
+
+            int min = Mathf.Min(startCoin, targetCoin);
+            int max = Mathf.Max(startCoin, targetCoin);
+
+            int fake = Random.Range(min, max + 1);
+            coinText.text = $"Coin\n{fake}";
+
+            await UniTask.Yield();
+        }
+
+        // 最終値へ滑らかに寄せる
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime * 2f;
+
+            int value = Mathf.RoundToInt(Mathf.Lerp(startCoin, targetCoin, t));
+            coinText.text = $"Coin\n{value}";
+
+            await UniTask.Yield();
+        }
+
+        // 最終値で確定
+        coinText.text = $"Coin\n{targetCoin}";
+    }
+
+    /// <summary>
+    /// プレイヤーの予想が当たったかどうかを判定する
+    /// 現在の賭け情報と勝者サイドを比較する
+    /// </summary>
+    private bool IsPlayerWin(MatchResultData result)
+    {
+        // 賭け情報が無ければ失敗扱い
+        if (GameSession.Instance == null || GameSession.Instance.CurrentBet == null)
+        {
+            return false;
+        }
+
+        // 予想した側と勝者側が一致していれば成功
+        return GameSession.Instance.CurrentBet.Side == result.WinnerSide;
+    }
+
+    /// <summary>
     /// 次の画面へ進む
     /// 最終ラウンドなら AllResult、それ以外なら次の Bet に進む
     /// </summary>
@@ -112,17 +288,15 @@ public class ResultSceneController : MonoBehaviour
         // 多重遷移防止
         isTransitioning = true;
 
-        // 3試合目なら最終結果画面へ
+        // 最終ラウンドなら最終結果へ
         if (GameSession.Instance.IsLastRound())
         {
             SceneManager.LoadScene(SceneNames.AllResult);
             return;
         }
 
-        // 次のラウンドへ進める
+        // 次ラウンドへ進めて次のBetへ
         GameSession.Instance.NextRound();
-
-        // 次の賭け画面へ移動
         SceneManager.LoadScene(SceneNames.Bet);
     }
 }
