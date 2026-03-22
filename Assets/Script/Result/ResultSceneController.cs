@@ -24,6 +24,13 @@ public class ResultSceneController : MonoBehaviour
     [SerializeField] private TMP_Text roundText;
     [SerializeField] private TMP_Text boolingWinnerText;
 
+
+    [Header("SE")]
+    [SerializeField] private AudioSource audio;
+    [SerializeField] private AudioClip WinSound;
+    [SerializeField] private AudioClip LoseSound;
+    [SerializeField] private AudioClip CoinSound;
+
     // 連打で複数回遷移しないようにするフラグ
     private bool isTransitioning = false;
 
@@ -174,6 +181,9 @@ public class ResultSceneController : MonoBehaviour
                     .DOScale(1f, 0.2f)
                     .SetEase(Ease.InOutQuad)
                     .AsyncWaitForCompletion();
+
+                audio.PlayOneShot(WinSound);
+                
             }
             else
             {
@@ -184,6 +194,8 @@ public class ResultSceneController : MonoBehaviour
                     .DOScale(1f, 0.8f)
                     .SetEase(Ease.OutQuad)
                     .AsyncWaitForCompletion();
+
+                audio.PlayOneShot(LoseSound);
             }
         }
 
@@ -191,6 +203,7 @@ public class ResultSceneController : MonoBehaviour
         // ④ コイン表示演出
         // ---------------------------
         await AnimateCoin(result, isWin);
+        audio.PlayOneShot(CoinSound);
     }
 
     /// <summary>
@@ -289,7 +302,7 @@ public class ResultSceneController : MonoBehaviour
         isTransitioning = true;
 
         // 最終ラウンドなら最終結果へ
-        if (GameSession.Instance.IsLastRound())
+        if (GameSession.Instance.IsLastRound()　|| GameSession.Instance.CurrentCoin <= 0)
         {
             SceneManager.LoadScene(SceneNames.AllResult);
             return;

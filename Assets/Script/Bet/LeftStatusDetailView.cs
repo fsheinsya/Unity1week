@@ -118,9 +118,9 @@ public class LeftStatusDetailView : MonoBehaviour
         SetText(accuracyText, "命中率:----");
         SetText(evasionText, "回避率:----");
 
-        SetText(elementText, "属性：無");
-        SetText(personalityText, "性格：なし");
-        SetText(oddsText, "オッズ: 0.0");
+        SetText(elementText, "　");
+        SetText(personalityText, "　");
+        SetText(oddsText, "　");
 
         SetText(skillText1, "スキルなし");
         SetText(skillText2, "スキルなし");
@@ -155,9 +155,9 @@ public class LeftStatusDetailView : MonoBehaviour
         accuracyText.text = $"命中率:{data.Stats.Accuracy}";
         evasionText.text = $"回避率:{data.Stats.Evasion}";
 
-        elementText.text = $"属性：{GetElementName(data.Element)}";
-        personalityText.text = $"性格：{GetPersonalityName(data.Personality)}";
-        oddsText.text = $"オッズ: {odds:F1}";
+        elementText.text = $"{GetElementName(data.Element)}";
+        personalityText.text = $"{GetPersonalityName(data.Personality)}";
+        oddsText.text = $"{odds:F1}";
 
         skillText1.text = GetSkillName(data, 0);
         skillText2.text = GetSkillName(data, 1);

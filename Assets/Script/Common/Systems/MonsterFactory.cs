@@ -114,7 +114,7 @@ public class MonsterFactory
                     SkillName = "強撃",
                     SkillType = SkillType.StrongAttack,
                     Power = 12,
-                    SuccessRate = 85
+                    SuccessRate = 65
                 };
 
             case PersonalityType.Calm:
@@ -129,7 +129,7 @@ public class MonsterFactory
             case PersonalityType.Flexible:
                 return index == 0 ? normalAttack : new SkillData
                 {
-                    SkillName = "まねる",
+                    SkillName = "祈り",
                     SkillType = SkillType.RandomSkill,
                     Power = 0,
                     SuccessRate = 100

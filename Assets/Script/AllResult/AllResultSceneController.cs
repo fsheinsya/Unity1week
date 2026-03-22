@@ -68,13 +68,15 @@ public class AllResultSceneController : MonoBehaviour
         string ending = "";
 
         if (coin <= 0)
-            ending = "破滅エンド\n闇闘技場にすべてを奪われた。";
+            ending = "債務者エンド(WORST END)\nうらに全てを奪われ、スライムとして戦うことになってしまった、、、";
         else if (coin <= 100)
-            ending = "敗北エンド\n生き残ったが、何も残らなかった。";
-        else if (coin <= 200)
-            ending = "凡人エンド\n少し勝ったが、伝説にはなれなかった。";
+            ending = "敗北エンド(NORMAL END)\nうらに負けてしまったので、二度と関わらないと決意した。";
+        else if (coin <= 300)
+            ending = "凡人エンド(BAD END)\nうらに少し勝った。その後も賭けに挑むが彼が幸せになることはなかった。";
+        else if (coin <= 700)
+            ending = "勝利エンド(GOOD END)\nうらにかった！彼はひと時の金持ちとして有名となった!";
         else
-            ending = "覇者エンド\nあなたは闇闘技場の勝者となった。";
+            ending = "裏社会の王エンド(HAPPY END)\nうらを全て掌握し裏闘技場の王となり、街を支配し隣町の魔王も恐れる伝説となった！";
 
         //-------------------------
         // ③ タイピング演出

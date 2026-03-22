@@ -34,6 +34,9 @@ public class MonsterData
     // 現在行動不能か
     public bool IsStunnedThisTurn;
 
+    public ActionType? LastAction; // 柔軟AI用
+    public int BetCoin;            // ギャンブル用
+
     /// <summary>
     /// 実際に戦闘で使う攻撃力
     /// </summary>

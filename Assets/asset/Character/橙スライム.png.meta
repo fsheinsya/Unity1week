@@ -211,7 +211,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: slimeOrange_0
+      name: "\u6A59\u30B9\u30E9\u30A4\u30E0"
       rect:
         serializedVersion: 2
         x: 0
@@ -270,8 +270,8 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":160.0,"y":160.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      slimeOrange_0: 5288837014847744195
       slimeOrange_1: -1852838179541101139
+      "\u6A59\u30B9\u30E9\u30A4\u30E0": 5288837014847744195
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

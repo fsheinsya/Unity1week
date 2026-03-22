@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ public class BattleSimulator
         // 状態異常を初期化
         left.StatusAilment = StatusAilmentType.None;
         right.StatusAilment = StatusAilmentType.None;
+
+        BattleSceneController battle = new BattleSceneController();
 
         AddLog(logs, $"{left.Name} と {right.Name} の戦闘開始！", left, right);
 
@@ -91,7 +94,7 @@ public class BattleSimulator
 
         if (leftSpeed == rightSpeed)
         {
-            return Random.Range(0, 2) == 0;
+            return UnityEngine.Random.Range(0, 2) == 0;
         }
 
         return leftSpeed > rightSpeed;
@@ -183,7 +186,7 @@ public class BattleSimulator
                         }
                     }
                 }
-                return attacker.Skills[Random.Range(0, attacker.Skills.Count)];
+                return attacker.Skills[UnityEngine.Random.Range(0, attacker.Skills.Count)];
 
             case PersonalityType.Aggressive:
                 // 低確率系を優先
@@ -194,11 +197,11 @@ public class BattleSimulator
                         return skill;
                     }
                 }
-                return attacker.Skills[Random.Range(0, attacker.Skills.Count)];
+                return attacker.Skills[UnityEngine.Random.Range(0, attacker.Skills.Count)];
 
             default:
                 // その他はランダム
-                return attacker.Skills[Random.Range(0, attacker.Skills.Count)];
+                return attacker.Skills[UnityEngine.Random.Range(0, attacker.Skills.Count)];
         }
     }
 
@@ -216,7 +219,7 @@ public class BattleSimulator
         AddLog(logs, $"{attacker.Name} は {skill.SkillName} を使った！", left, right);
 
         // 成功判定
-        if (Random.Range(0, 100) >= skill.SuccessRate)
+        if (UnityEngine.Random.Range(0, 100) >= skill.SuccessRate)
         {
             AddLog(logs, $"しかし失敗した！", left, right);
             return;
@@ -307,7 +310,7 @@ public class BattleSimulator
                 break;
 
             case SkillType.InstantDeath:
-                if (Random.Range(0, 100) < 15)
+                if (UnityEngine.Random.Range(0, 100) < 15)
                 {
                     defender.CurrentHp = 0;
                     AddLog(logs, $"即死が決まった！", left, right);
@@ -320,7 +323,7 @@ public class BattleSimulator
 
             case SkillType.RandomSkill:
                 {
-                    int roll = Random.Range(0, 3);
+                    int roll = UnityEngine.Random.Range(0, 10);
                     if (roll == 0)
                     {
                         TryDamage(attacker, defender, 10, attacker.Element, logs, left, right);
@@ -330,10 +333,30 @@ public class BattleSimulator
                         attacker.AttackBuff += 5;
                         AddLog(logs, $"{attacker.Name} の攻撃力が上がった！", left, right);
                     }
-                    else
+                    else if(roll == 2) 
                     {
+   
                         defender.StatusAilment = StatusAilmentType.Poison;
                         AddLog(logs, $"{defender.Name} は毒状態になった！", left, right);
+                    }
+                    else if(roll == 3)
+                        {
+                            defender.StatusAilment = StatusAilmentType.Stun;
+                            AddLog(logs, $"{defender.Name} は行動不能になった！", left, right);
+                        }
+                    else if(roll == 4)
+                    {
+                        attacker.IsInvincible = true;
+                        AddLog(logs, $"{attacker.Name} は1ターン無敵になった！", left, right);
+                    }
+                    else if(roll == 5)
+                    {
+                        defender.DefenseBuff -= 5;
+                        AddLog(logs, $"{defender.Name} の防御力が下がった！", left, right);
+                    }
+                    else
+                    {
+                        AddLog(logs, $"しかしなにもおこらなかった！", left, right);
                     }
                     break;
                 }
@@ -363,7 +386,7 @@ public class BattleSimulator
         int hitChance = attacker.Stats.Accuracy - (defender.Stats.Evasion + defender.Stats.Speed / 5);
         hitChance = Mathf.Clamp(hitChance, 20, 95);
 
-        if (Random.Range(0, 100) >= hitChance)
+        if (UnityEngine.Random.Range(0, 100) >= hitChance)
         {
             AddLog(logs, $"{defender.Name} は攻撃を回避した！", left, right);
             return;
@@ -374,7 +397,7 @@ public class BattleSimulator
         int defense = defender.GetCurrentDefense();
 
         // 基本ダメージ
-        int damage = Mathf.Max(1, attack - defense / 2 + skillPower + Random.Range(-2, 3));
+        int damage = Mathf.Max(1, attack - defense / 2 + skillPower + UnityEngine.Random.Range(-2, 3));
 
         // 属性倍率
         float elementMultiplier = GetElementMultiplier(attackElement, defender.Element);
@@ -387,7 +410,7 @@ public class BattleSimulator
             criticalRate += 15;
         }
 
-        bool critical = Random.Range(0, 100) < criticalRate;
+        bool critical = UnityEngine.Random.Range(0, 100) < criticalRate;
         if (critical)
         {
             damage = Mathf.RoundToInt(damage * 1.5f);
@@ -395,7 +418,7 @@ public class BattleSimulator
 
         // 特殊能力: IronWall
         bool ironWall = defender.SpecialAbility == SpecialAbilityType.IronWall &&
-                        Random.Range(0, 100) < 20;
+                        UnityEngine.Random.Range(0, 100) < 20;
         if (ironWall)
         {
             damage = Mathf.Max(1, Mathf.RoundToInt(damage * 0.5f));
@@ -433,18 +456,18 @@ public class BattleSimulator
         }
 
         // 成長
-        bool growthTriggered = Random.Range(0, 100) < monster.Stats.Growth;
+        bool growthTriggered = UnityEngine.Random.Range(0, 100) < monster.Stats.Growth;
         if (growthTriggered)
         {
-            bool raiseAttack = Random.Range(0, 2) == 0;
+            bool raiseAttack = UnityEngine.Random.Range(0, 2) == 0;
             if (raiseAttack)
             {
-                monster.AttackBuff += 1;
+                monster.AttackBuff += UnityEngine.Random.Range(0,3);
                 AddLog(logs, $"{monster.Name} は成長して攻撃力が上がった！", left, right);
             }
             else
             {
-                monster.DefenseBuff += 1;
+                monster.DefenseBuff += UnityEngine.Random.Range(0,3);
                 AddLog(logs, $"{monster.Name} は成長して防御力が上がった！", left, right);
             }
         }

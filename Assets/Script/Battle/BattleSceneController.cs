@@ -30,6 +30,8 @@ public class BattleSceneController : MonoBehaviour
     [Header("ログ表示")]
     [SerializeField] private ActionLogView actionLogView;
 
+    [Header("SE")]
+    [SerializeField] private AudioSource audio;
     // バトル計算本体
     private BattleSimulator battleSimulator;
 

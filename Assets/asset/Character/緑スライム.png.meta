@@ -1,43 +1,43 @@
 fileFormatVersion: 2
-guid: 20e7df3adf5364042ba844e5314521c5
+guid: 5b0cef42b14f0ea40983cbc92069adb3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 838662039281341075
-    second: slimePueble_0
+      213: -3211810621207689254
+    second: slimeGreen_0
   - first:
-      213: -1365362455015332401
-    second: slimePueble_1
+      213: -1919240238154806311
+    second: slimeGreen_1
   - first:
-      213: -6200562067844850635
-    second: slimePueble_2
+      213: -8435546371847097797
+    second: slimeGreen_2
   - first:
-      213: -263016555383501319
-    second: slimePueble_3
+      213: 4806608555696531029
+    second: slimeGreen_3
   - first:
-      213: -4040446469909206725
-    second: slimePueble_4
+      213: 512415582412104136
+    second: slimeGreen_4
   - first:
-      213: 2214809132578694318
-    second: slimePueble_5
+      213: 7128222807608621223
+    second: slimeGreen_5
   - first:
-      213: 5150667012793244555
-    second: slimePueble_6
+      213: 8647254795800531264
+    second: slimeGreen_6
   - first:
-      213: -1773751913503077192
-    second: slimePueble_7
+      213: -2884634216353552480
+    second: slimeGreen_7
   - first:
-      213: 3117686822813484323
-    second: slimePueble_8
+      213: -5731304948554808299
+    second: slimeGreen_8
   - first:
-      213: 1543921621861164672
-    second: slimePueble_9
+      213: -8025955152203399689
+    second: slimeGreen_9
   - first:
-      213: -7640786743076566573
-    second: slimePueble_10
+      213: -2122982115885370485
+    second: slimeGreen_10
   - first:
-      213: 1023159886163792644
-    second: slimePueble_11
+      213: -2274892865367220853
+    second: slimeGreen_11
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -211,7 +211,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: slimePueble_0
+      name: "\u7DD1\u30B9\u30E9\u30A4\u30E0"
       rect:
         serializedVersion: 2
         x: 0
@@ -226,14 +226,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 39218f96ea683ab00800000000000000
-      internalID: 838662039281341075
+      spriteID: ad7c615c14b5d63d0800000000000000
+      internalID: -3211810621207689254
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: slimePueble_1
+      name: slimeGreen_1
       rect:
         serializedVersion: 2
         x: 0
@@ -248,8 +248,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fc5e727c4124d0de0800000000000000
-      internalID: -1365362455015332401
+      spriteID: 9db85260c2d7d55e0800000000000000
+      internalID: -1919240238154806311
       vertices: []
       indices: 
       edges: []
@@ -258,7 +258,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 92e4ca6c2e6667b4e9164f20e07ddbd3
+    spriteID: 909edfd75782e4d4fb83a2ca191d091f
     internalID: 0
     vertices: []
     indices: 
@@ -270,8 +270,8 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":160.0,"y":160.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      slimePueble_0: 838662039281341075
-      slimePueble_1: -1365362455015332401
+      slimeGreen_1: -1919240238154806311
+      "\u7DD1\u30B9\u30E9\u30A4\u30E0": -3211810621207689254
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

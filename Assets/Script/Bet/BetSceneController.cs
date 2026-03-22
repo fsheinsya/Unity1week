@@ -37,20 +37,21 @@ public class BetSceneController : MonoBehaviour
     [SerializeField] private LeftStatusDetailView leftStatusView;
     [SerializeField] private RightStatusDetailView rightStatusView;
 
+    [Header("SE")]
+    [SerializeField] private AudioSource audio;
+    [SerializeField] private AudioClip betSE;     // カチカチ音
+    [SerializeField] private AudioClip selectSE;  // 決定音
+
     private bool isOpeningStatus = false;
 
-    // 現在どちらを選んだか
     private PredictionSide selectedSide;
-
-    // まだ未選択かどうか
     private bool hasSelectedSide = false;
-
 
     // =========================
     // 🔥 賭け金
     // =========================
     private int currentBetAmount = 10;
-    private const int MIN_BET = 10;
+    private const int MIN_BET = 1;
     private const int BET_STEP = 1;
 
     // =========================
@@ -59,6 +60,22 @@ public class BetSceneController : MonoBehaviour
     private bool isPressing = false;
     private bool isIncrease = true;
     private CancellationTokenSource cts;
+
+    // =========================
+    // 🔊 SE再生
+    // =========================
+    private void PlaySE(AudioClip clip)
+    {
+        if (clip != null && Camera.main != null)
+        {
+            // 少しピッチランダムで気持ちよく
+            AudioSource.PlayClipAtPoint(
+                clip,
+                Camera.main.transform.position,
+                Random.Range(0.95f, 1.05f)
+            );
+        }
+    }
 
     private void Start()
     {
@@ -93,9 +110,7 @@ public class BetSceneController : MonoBehaviour
     {
         coinCanvas.alpha = 0f;
 
-        // 🔥 修正ポイント
-        await coinCanvas.DOFade(1f, 0.5f)
-            .AsyncWaitForCompletion();
+        await coinCanvas.DOFade(1f, 0.5f).AsyncWaitForCompletion();
 
         await UniTask.Delay(300);
 
@@ -113,36 +128,24 @@ public class BetSceneController : MonoBehaviour
         l.anchoredPosition = new Vector2(-offset, l.anchoredPosition.y);
         r.anchoredPosition = new Vector2(offset, r.anchoredPosition.y);
 
-        // 🔥 ここも修正
         await UniTask.WhenAll(
-            l.DOAnchorPosX(lx + 80, 0.4f)
-                .SetEase(Ease.OutBack)
-                .AsyncWaitForCompletion()
-                .AsUniTask(),
-
-            r.DOAnchorPosX(rx - 80, 0.4f)
-                .SetEase(Ease.OutBack)
-                .AsyncWaitForCompletion()
-                .AsUniTask()
+            l.DOAnchorPosX(lx + 80, 0.4f).SetEase(Ease.OutBack).AsyncWaitForCompletion().AsUniTask(),
+            r.DOAnchorPosX(rx - 80, 0.4f).SetEase(Ease.OutBack).AsyncWaitForCompletion().AsUniTask()
         );
 
-        // 🔥 ここも修正
         await UniTask.WhenAll(
-            l.DOAnchorPosX(lx, 0.2f)
-                .AsyncWaitForCompletion()
-                .AsUniTask(),
-
-            r.DOAnchorPosX(rx, 0.2f)
-                .AsyncWaitForCompletion()
-                .AsUniTask()
+            l.DOAnchorPosX(lx, 0.2f).AsyncWaitForCompletion().AsUniTask(),
+            r.DOAnchorPosX(rx, 0.2f).AsyncWaitForCompletion().AsUniTask()
         );
     }
 
     // =========================
-    // 🔥 賭け金操作
+    // 🔥 賭け金操作（SEあり）
     // =========================
     public void OnClickBetUp()
     {
+        audio.PlayOneShot(betSE);
+
         int max = GameSession.Instance.CurrentCoin;
 
         currentBetAmount += BET_STEP;
@@ -154,6 +157,8 @@ public class BetSceneController : MonoBehaviour
 
     public void OnClickBetDown()
     {
+        audio.PlayOneShot(betSE);
+
         currentBetAmount -= BET_STEP;
         if (currentBetAmount < MIN_BET)
             currentBetAmount = MIN_BET;
@@ -167,8 +172,36 @@ public class BetSceneController : MonoBehaviour
     }
 
     // =========================
-    // 🔥 長押し
+    // 🔥 長押し（SEなし）
     // =========================
+    private void Execute()
+    {
+        if (isIncrease)
+            Increase_NoSE();
+        else
+            Decrease_NoSE();
+    }
+
+    private void Increase_NoSE()
+    {
+        int max = GameSession.Instance.CurrentCoin;
+
+        currentBetAmount += BET_STEP;
+        if (currentBetAmount > max)
+            currentBetAmount = max;
+
+        RefreshBetText();
+    }
+
+    private void Decrease_NoSE()
+    {
+        currentBetAmount -= BET_STEP;
+        if (currentBetAmount < MIN_BET)
+            currentBetAmount = MIN_BET;
+
+        RefreshBetText();
+    }
+
     public void StartIncrease()
     {
         isIncrease = true;
@@ -215,14 +248,6 @@ public class BetSceneController : MonoBehaviour
         }
     }
 
-    private void Execute()
-    {
-        if (isIncrease)
-            OnClickBetUp();
-        else
-            OnClickBetDown();
-    }
-
     // =========================
     // ステータス
     // =========================
@@ -235,7 +260,6 @@ public class BetSceneController : MonoBehaviour
         isOpeningStatus = true;
 
         coinText.gameObject.SetActive(false);
-
         CloseSelectedUI();
         CloseBetAmountUI();
 
@@ -247,10 +271,7 @@ public class BetSceneController : MonoBehaviour
             PredictionSide.Left
         );
 
-        await leftStatusView.PlayOpenAnimation(
-            GameSession.Instance.LeftMonster,
-            odds
-        );
+        await leftStatusView.PlayOpenAnimation(GameSession.Instance.LeftMonster, odds);
 
         isOpeningStatus = false;
     }
@@ -261,7 +282,6 @@ public class BetSceneController : MonoBehaviour
         isOpeningStatus = true;
 
         coinText.gameObject.SetActive(false);
-
         CloseSelectedUI();
         CloseBetAmountUI();
 
@@ -273,10 +293,7 @@ public class BetSceneController : MonoBehaviour
             PredictionSide.Right
         );
 
-        await rightStatusView.PlayOpenAnimation(
-            GameSession.Instance.RightMonster,
-            odds
-        );
+        await rightStatusView.PlayOpenAnimation(GameSession.Instance.RightMonster, odds);
 
         isOpeningStatus = false;
     }
@@ -318,8 +335,13 @@ public class BetSceneController : MonoBehaviour
         rightCharaImage.sprite = right.Icon;
     }
 
+    // =========================
+    // 🎯 選択（SEあり）
+    // =========================
     public void OnClickLeftSelect()
     {
+        PlaySE(selectSE);
+
         selectedSide = PredictionSide.Left;
         hasSelectedSide = true;
 
@@ -329,11 +351,10 @@ public class BetSceneController : MonoBehaviour
         SceneManager.LoadScene(SceneNames.Battle);
     }
 
-    /// <summary>
-    /// 右に賭ける
-    /// </summary>
     public void OnClickRightSelect()
     {
+        PlaySE(selectSE);
+
         selectedSide = PredictionSide.Right;
         hasSelectedSide = true;
 
