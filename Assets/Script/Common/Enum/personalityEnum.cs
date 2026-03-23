@@ -7,7 +7,7 @@ public enum PersonalityType
     Calm,       // 冷静
     Flexible,   // 柔軟
     Taunt,      // 挑発
-    Aggressive, // 積極的
+    Aggressive, // 挑戦
     Timid       // 臆病
 }
 

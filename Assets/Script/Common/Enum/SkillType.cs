@@ -22,5 +22,6 @@ public enum SkillType
     SkillSealDebuff,
     DefenseDown,
     InstantDeath,
-    RandomSkill
+    RandomSkill,
+    None
 }

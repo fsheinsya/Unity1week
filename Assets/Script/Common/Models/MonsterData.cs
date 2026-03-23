@@ -12,6 +12,14 @@ public class MonsterData
     public MonsterStats Stats;
     public int CurrentHp;
 
+    // 状態管理
+    public bool IsInvincible;
+    public bool IsSkillLocked;
+    public int BuffAttack;
+    public int BuffDefense;
+    public int CritRateBonus;
+    public bool IsPoisoned;
+
     // 既存
     public SpecialAbilityType SpecialAbility;
 
@@ -28,14 +36,14 @@ public class MonsterData
     public int DefenseBuff;
     public int CriticalBuff;
 
-    // 1ターン無敵
-    public bool IsInvincible;
-
     // 現在行動不能か
     public bool IsStunnedThisTurn;
 
     public ActionType? LastAction; // 柔軟AI用
     public int BetCoin;            // ギャンブル用
+
+    // 🔥 追加（ここが重要）
+    public SkillType LastUsedSkillType = SkillType.None;
 
     /// <summary>
     /// 実際に戦闘で使う攻撃力

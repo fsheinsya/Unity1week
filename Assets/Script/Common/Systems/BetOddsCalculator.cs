@@ -22,7 +22,7 @@ public static class BetOddsCalculator
         // 同じくらいならほぼ等倍
         if (Mathf.Approximately(selectedScore, opponentScore))
         {
-            return 1.8f;
+            return 2.0f;
         }
 
         // 自分が弱いほど倍率が高くなる
@@ -30,7 +30,7 @@ public static class BetOddsCalculator
 
         // 倍率を制限する
         // 強い方に賭けたら低め、弱い方に賭けたら高め
-        float payout = Mathf.Clamp(ratio, 1.2f, 3.0f);
+        float payout = Mathf.Clamp(ratio, 2.0f, 5.0f);
 
         return payout;
     }

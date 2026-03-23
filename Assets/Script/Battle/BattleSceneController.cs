@@ -30,10 +30,18 @@ public class BattleSceneController : MonoBehaviour
     [Header("ログ表示")]
     [SerializeField] private ActionLogView actionLogView;
 
-    [Header("SE")]
+    [Header("演出")]
+    [SerializeField] private LeftCharacterView leftView;
+    [SerializeField] private RightCharacterView rightView;
+
+    [Header("SE,effect")]
     [SerializeField] private AudioSource audio;
+    [SerializeField] private BattleEffectPlayer effectPlayer;
     // バトル計算本体
     private BattleSimulator battleSimulator;
+
+
+    
 
     /// <summary>
     /// シーン開始時に呼ばれる
@@ -53,6 +61,7 @@ public class BattleSceneController : MonoBehaviour
             SceneManager.LoadScene(SceneNames.Bet);
             return;
         }
+
 
         // シミュレータ生成
         battleSimulator = new BattleSimulator();
@@ -147,32 +156,20 @@ public class BattleSceneController : MonoBehaviour
         // ログ1件ずつ表示して、その時点のHPも反映
         foreach (BattleLogEntry log in result.BattleLogs)
         {
-            // 1文表示
             await actionLogView.ShowMessageAnimated(log.Message);
 
-            // 左右HP更新
-            if (leftStatusView != null)
+            if (effectPlayer != null)
             {
+                await effectPlayer.Play(log);
+            }
+
+            if (leftStatusView != null)
                 leftStatusView.SetHp(log.LeftHp);
-            }
 
             if (rightStatusView != null)
-            {
                 rightStatusView.SetHp(log.RightHp);
-            }
 
-            // 状態異常表示も更新
-            if (leftStatusView != null)
-            {
-                leftStatusView.SetStatus(session.LeftMonster.StatusAilment);
-            }
-
-            if (rightStatusView != null)
-            {
-                rightStatusView.SetStatus(session.RightMonster.StatusAilment);
-            }
-
-            await UniTask.Delay(900);
+            await UniTask.Delay(500);
         }
 
         // 的中時はコイン加算

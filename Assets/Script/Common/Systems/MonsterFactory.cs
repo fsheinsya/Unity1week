@@ -17,7 +17,7 @@ public class MonsterFactory
         int atk = Random.Range(8, 26);
         int def = Random.Range(8, 26);
         int growth = Random.Range(5, 31);
-        int speed = Random.Range(5, 26);
+        int speed = Random.Range(5, 31);
         int accuracy = Random.Range(65, 96);
         int evasion = Random.Range(5, 26);
         int critical = Random.Range(5, 21);
@@ -69,7 +69,7 @@ public class MonsterFactory
     /// </summary>
     private ElementType GetRandomElement()
     {
-        int value = Random.Range(0, 8);
+        int value = Random.Range(0, 7);//無は基本的に起きないように設定
         return (ElementType)value;
     }
 
@@ -78,7 +78,7 @@ public class MonsterFactory
     /// </summary>
     private PersonalityType GetRandomPersonality()
     {
-        int value = Random.Range(0, 7);
+        int value = Random.Range(0, 6);//なしに基本的にならないように設定
         return (PersonalityType)value;
     }
 
@@ -87,7 +87,7 @@ public class MonsterFactory
     /// </summary>
     private SpecialAbilityType GetRandomSpecialAbility()
     {
-        int value = Random.Range(0, 7);
+        int value = Random.Range(0, 6);//なしに基本的にならないように設定
         return (SpecialAbilityType)value;
     }
 
