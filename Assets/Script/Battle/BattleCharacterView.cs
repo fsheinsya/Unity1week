@@ -50,19 +50,19 @@ public abstract class BattleCharacterView : MonoBehaviour
     public virtual async UniTask PlayHeal()
     {
         PlaySE(healSE);
-        await image.DOColor(Color.cyan, 0.2f).AsyncWaitForCompletion();
+        await image.DOColor(Color.lightSkyBlue, 0.2f).AsyncWaitForCompletion();
         await image.DOColor(originalColor, 0.3f).AsyncWaitForCompletion();
     }
 
     public virtual async UniTask PlayBuff()
     {
         PlaySE(buffSE);
-        await image.DOColor(Color.red, 0.2f).AsyncWaitForCompletion();
+        await image.DOColor(Color.orange, 0.2f).AsyncWaitForCompletion();
         await image.DOColor(originalColor, 0.3f).AsyncWaitForCompletion();
     }
 
     public virtual void ApplyPoison()
     {
-        image.DOColor(Color.green, 0.3f);
+        image.DOColor(Color.purple, 0.3f);
     }
 }
