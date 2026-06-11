@@ -1,4 +1,4 @@
-# タイトル名「Underside」
+# Underside
 ## 公開URL
 ブラウザ上でプレイできます。 URL：https://unityroom.com/games/underdside
 ## 概要
